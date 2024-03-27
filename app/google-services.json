@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "861253890688",
+    "project_id": "sickler-aid",
+    "storage_bucket": "sickler-aid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861253890688:android:2ef5821e2b26aa9099ec65",
+        "android_client_info": {
+          "package_name": "com.micodes.sickleraid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861253890688-0ic9rtaafkgds41d3gp65vp4kinjjtj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.micodes.sickleraid",
+            "certificate_hash": "cf406724757843bf44f711c87828e02a83f00031"
+          }
+        },
+        {
+          "client_id": "861253890688-0qbkm4mcune6mhfgf7gtjtnopul4mkhs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnYxCbBc4PJkA0qYHEs8_cDpj9jv2Fo2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861253890688-0qbkm4mcune6mhfgf7gtjtnopul4mkhs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

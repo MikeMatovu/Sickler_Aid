@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.micodes.sickleraid" />
+                  <option name="mobileSdkAppId" value="1:861253890688:android:2ef5821e2b26aa9099ec65" />
+                  <option name="projectId" value="sickler-aid" />
+                  <option name="projectNumber" value="861253890688" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
