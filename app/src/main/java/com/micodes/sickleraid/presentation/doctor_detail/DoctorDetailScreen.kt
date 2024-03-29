@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun DoctorDetails() {
+fun DoctorDetailsScreen() {
     Column() {
 
         Icon(imageVector = Icons.Default.BrokenImage, contentDescription = null)

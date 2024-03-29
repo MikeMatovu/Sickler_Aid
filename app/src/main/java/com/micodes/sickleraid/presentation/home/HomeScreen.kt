@@ -1,6 +1,7 @@
 package com.micodes.sickleraid.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.rounded.Cast
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,17 +42,17 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
-import com.micodes.sickleraid.presentation.common.composable.AppBottomBarComposable
+import com.micodes.sickleraid.presentation.auth.login.LoginScreen
+import com.micodes.sickleraid.presentation.auth.login.LoginViewModel
+import com.micodes.sickleraid.presentation.auth.signup.SignUpViewModel
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.home.components.ContentListItem
 import com.micodes.sickleraid.presentation.home.components.ContentRow
 import com.micodes.sickleraid.presentation.home.components.SectionTitle
-import com.micodes.sickleraid.presentation.login.LoginScreen
-import com.micodes.sickleraid.presentation.login.LoginViewModel
 import com.micodes.sickleraid.presentation.navgraph.Screen
-import com.micodes.sickleraid.presentation.signup.SignUpViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,11 +66,77 @@ fun HomeScreen(
     val authState = DataProvider.authState
     Scaffold(
         topBar = {
-            TopAppBarComposable()
+            TopAppBarComposable(
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.test_img), //TODO: add image
+                        contentDescription = "Logo",
+                        modifier = Modifier.fillMaxWidth(0.4f)
+                    )
+                },
+                actions = listOf(
+                    {
+                        IconButton(onClick = { /* TODO */ }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Notifications,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    {
+                        IconButton(onClick = { /* TODO */ }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    {
+                        IconButton(onClick = { /* TODO */ }) {
+                            Image(
+                                painter = painterResource(id = R.drawable.test_img),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                )
+            )
         },
-        bottomBar = {
-            AppBottomBarComposable()
-        },
+///
+//                {
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Cast,
+//                            contentDescription = null
+//                        )
+//                    }
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(
+//                            imageVector = Icons.Outlined.Notifications,
+//                            contentDescription = null
+//                        )
+//                    }
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Search,
+//                            contentDescription = null
+//                        )
+//                    }
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Image(
+//                            painter = painterResource(id = R.drawable.ic_launcher_foreground), //TODO: Add image
+//                            contentDescription = null,
+//                            modifier = Modifier
+//                                .size(24.dp)
+//                                .clip(CircleShape)
+//                        )
+//                    }
+//                }
+//            )
+//        bottomBar = {
+//            AppBottomBarComposable()
+//        },
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
     ) { paddingValues ->
@@ -72,7 +146,7 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            SectionTitle()
+            SectionTitle("Medical Information")
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -81,7 +155,7 @@ fun HomeScreen(
                 ContentRow(modifier = Modifier)
             }
 
-            SectionTitle()
+            SectionTitle("Medication List")
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -94,7 +168,7 @@ fun HomeScreen(
                 ContentListItem()
             }
 
-            SectionTitle()
+            SectionTitle("My support")
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -171,7 +245,7 @@ fun HomeScreen(
                 )
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen( openAndPopUp = { email, password ->
+                    LoginScreen(openAndPopUp = { email, password ->
                         // Mock implementation for openAndPopUp
                         println("Email: $email, Password: $password")
                     }, testvm)

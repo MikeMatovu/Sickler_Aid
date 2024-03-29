@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,9 +23,11 @@ import androidx.navigation.compose.rememberNavController
 import com.micodes.sickleraid.SicklerAidTheme
 import com.micodes.sickleraid.presentation.common.snackbar.SnackbarManager
 import com.micodes.sickleraid.presentation.home.HomeScreen
-import com.micodes.sickleraid.presentation.login.LoginScreen
+import com.micodes.sickleraid.presentation.auth.login.LoginScreen
 import com.micodes.sickleraid.presentation.navgraph.Screen
-import com.micodes.sickleraid.presentation.signup.SignUpScreen
+import com.micodes.sickleraid.presentation.auth.signup.SignUpScreen
+import com.micodes.sickleraid.presentation.navgraph.AppNavGraph
+import com.micodes.sickleraid.presentation.navigator.SicklerCareNavigator
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -51,13 +54,15 @@ fun SicklerAidApp() {
                     )
                 },
             ) { innerPaddingModifier ->
-                NavHost(
-                    navController = appState.navController,
-                    startDestination = Screen.HomeScreen.route,
-                    modifier = Modifier.padding(innerPaddingModifier)
-                ) {
-                    sicklerAidGraph(appState)
-                }
+
+//                NavHost(
+//                    navController = appState.navController,
+//                    startDestination = Screen.HomeScreen.route,
+//                    modifier = Modifier.padding(innerPaddingModifier)
+//                ) {
+//                    sicklerAidGraph(appState)
+//                }
+                AppNavGraph(Screen.HomeScreen.route , modifier = Modifier.padding(innerPaddingModifier))
             }
         }
     }
@@ -75,9 +80,11 @@ fun rememberAppState(
     }
 
 
+//Not being used currently
 fun NavGraphBuilder.sicklerAidGraph(appState: SicklerAidAppState) {
     composable(Screen.HomeScreen.route) {
-        HomeScreen(navController = appState.navController)
+//        HomeScreen(navController = appState.navController)
+        SicklerCareNavigator()
     }
     composable(Screen.LoginScreen.route) {
 //        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })

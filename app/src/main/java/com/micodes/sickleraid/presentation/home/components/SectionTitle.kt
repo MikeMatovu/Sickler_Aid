@@ -15,7 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SectionTitle() {
+fun SectionTitle(
+    sectionTitle: String
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -24,7 +26,7 @@ fun SectionTitle() {
         Text(
             text = "Medication List",
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
@@ -37,5 +39,5 @@ fun SectionTitle() {
 @Composable
 @Preview(showBackground = true)
 fun SectionTitlePreview() {
-    SectionTitle()
+    SectionTitle("Medication List")
 }
