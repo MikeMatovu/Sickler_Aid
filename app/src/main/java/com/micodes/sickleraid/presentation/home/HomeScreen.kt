@@ -69,7 +69,7 @@ fun HomeScreen(
             TopAppBarComposable(
                 title = {
                     Image(
-                        painter = painterResource(id = R.drawable.test_img), //TODO: add image
+                        painter = painterResource(id = R.drawable.ic_app), //TODO: add image
                         contentDescription = "Logo",
                         modifier = Modifier.fillMaxWidth(0.4f)
                     )
@@ -94,7 +94,7 @@ fun HomeScreen(
                     {
                         IconButton(onClick = { /* TODO */ }) {
                             Image(
-                                painter = painterResource(id = R.drawable.test_img),
+                                painter = painterResource(id = R.drawable.ic_profile),
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -103,37 +103,6 @@ fun HomeScreen(
                 )
             )
         },
-///
-//                {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Cast,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Outlined.Notifications,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Search,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.ic_launcher_foreground), //TODO: Add image
-//                            contentDescription = null,
-//                            modifier = Modifier
-//                                .size(24.dp)
-//                                .clip(CircleShape)
-//                        )
-//                    }
-//                }
-//            )
 //        bottomBar = {
 //            AppBottomBarComposable()
 //        },

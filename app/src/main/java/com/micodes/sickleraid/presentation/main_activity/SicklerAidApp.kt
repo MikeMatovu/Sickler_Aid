@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -34,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SicklerAidApp() {
+    val viewModel: MainViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
     SicklerAidTheme {
 
@@ -62,7 +64,7 @@ fun SicklerAidApp() {
 //                ) {
 //                    sicklerAidGraph(appState)
 //                }
-                AppNavGraph(Screen.HomeScreen.route , modifier = Modifier.padding(innerPaddingModifier))
+                AppNavGraph(startDestination = viewModel.startDestination.value , modifier = Modifier.padding(innerPaddingModifier))
             }
         }
     }
@@ -87,7 +89,7 @@ fun NavGraphBuilder.sicklerAidGraph(appState: SicklerAidAppState) {
         SicklerCareNavigator()
     }
     composable(Screen.LoginScreen.route) {
-//        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(Screen.SignUpScreen.route) {
