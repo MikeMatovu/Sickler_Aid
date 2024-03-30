@@ -17,11 +17,15 @@ enum class AuthState {
 
 object DataProvider {
 
+
+
     // 1.
     var anonymousSignInResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
     var googleSignInResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
     var signOutResponse by mutableStateOf<SignOutResponse>(Response.Success(false))
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Response.Success(null))
+    var createUserResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
+    var signInWithEmailResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
 
     var user by mutableStateOf<FirebaseUser?>(null)
 

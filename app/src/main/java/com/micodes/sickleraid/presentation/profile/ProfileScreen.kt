@@ -1,72 +1,123 @@
 package com.micodes.sickleraid.presentation.profile
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrokenImage
-import androidx.compose.material.icons.filled.Label
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.TextFieldValue
+import coil.compose.rememberAsyncImagePainter
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.micodes.sickleraid.presentation.profile.composable.DefaultButton
+import com.micodes.sickleraid.presentation.profile.composable.Header
+import com.micodes.sickleraid.presentation.profile.composable.ProfileAvatar
+import com.micodes.sickleraid.presentation.profile.composable.SpaceHorizontal16
+import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical24
+import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical32
+import com.micodes.sickleraid.presentation.profile.composable.TextButton
+import com.micodes.sickleraid.presentation.profile.composable.InformationCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-
+    viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-
-    var name by remember { mutableStateOf(TextFieldValue()) }
-    var dob by remember { mutableStateOf(TextFieldValue()) }
-    var location by remember { mutableStateOf(TextFieldValue()) }
-    var email by remember { mutableStateOf(TextFieldValue()) }
-    var contactNumber by remember { mutableStateOf(TextFieldValue()) }
-
-    Column {
-
-        Text(text = "Complete your health profile")
-
-        Icon(imageVector = Icons.Default.BrokenImage, contentDescription = null)
-
-        Text("Add persa")
-
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            placeholder = { Text("Full name") })
-
-        TextField(
-            value = dob,
-            onValueChange = { dob = it },
-            placeholder = { Text("Date of birth") })
-
-        TextField(
-            value = location,
-            onValueChange = { location = it },
-            placeholder = { Text("Location Information") })
-
-        TextField(value = email, onValueChange = { email = it }, placeholder = { Text("Email") })
-
-        TextField(
-            value = contactNumber,
-            onValueChange = { contactNumber = it },
-            placeholder = { Text("Contact number") })
-
-//        FileArea(){
-//
-//        }
-
-        Button(onClick = {}) {
-            Text(text = "Click")
-        }
-
-    }
-
-
+    val state by viewModel.state.collectAsState()
+    ProfileContent(
+        state = state,
+        onChangeFirstName = viewModel::onChangeFirstName,
+        onChangeLastName = viewModel::onChangeLastName,
+        onChangeLocation = viewModel::onChangeLocation,
+        onChangeEmail = viewModel::onChangeEmail,
+        onChangePhone = viewModel::onChangePhone,
+        onSaveUserInfo = viewModel::onSaveUserInfo
+    )
 }
+
+@Composable
+private fun ProfileContent(
+    state: ProfileUiState,
+    onChangeFirstName: (String) -> Unit,
+    onChangeLastName: (String) -> Unit,
+    onChangeLocation: (String) -> Unit,
+    onChangeEmail: (String) -> Unit,
+    onChangePhone: (String) -> Unit,
+    onSaveUserInfo: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 32.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Header(
+            title = "Account",
+            subtitle = "Edit your profile information",
+        )
+        SpaceVertical32()
+
+        ProfileAvatar(
+            painter = rememberAsyncImagePainter(model = state.profilePictureLink),
+
+            size = 128
+        )
+        SpaceVertical24()
+
+        TextButton(text = "Change profile Picture") {}
+        SpaceVertical32()
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.weight(1F)) {
+                InformationCard(
+                    title = "First Name",
+                    information = state.firstName,
+                    onTextChange = onChangeFirstName
+                )
+            }
+            SpaceHorizontal16()
+            Box(modifier = Modifier.weight(1F)) {
+                InformationCard(
+                    title = "Last Name",
+                    information = state.lastName,
+                    onTextChange = onChangeLastName
+                )
+            }
+        }
+        InformationCard(
+            title = "Location",
+            information = state.location,
+            onTextChange = onChangeLocation
+        )
+        InformationCard(
+            title = "Email",
+            information = state.email,
+            onTextChange = onChangeEmail
+        )
+        InformationCard(
+            title = "Phone Number",
+            information = state.phone,
+            onTextChange = onChangePhone
+        )
+
+        Spacer(modifier = Modifier.weight(1F))
+        DefaultButton(buttonText = "Save", onClick = onSaveUserInfo)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileScreenPreview() {
+    ProfileScreen()
+}
+

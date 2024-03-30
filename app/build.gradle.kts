@@ -76,6 +76,9 @@ dependencies {
 
 
 
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     //Google sign in
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 

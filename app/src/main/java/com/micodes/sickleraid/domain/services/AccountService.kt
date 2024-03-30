@@ -17,11 +17,11 @@ interface AccountService {
 
     val currentUser: Flow<User>
 
-    suspend fun authenticate(email: String, password: String)
+    suspend fun logInWithEmailAndPassword(email: String, password: String): FirebaseSignInResponse
     suspend fun sendRecoveryEmail(email: String)
     suspend fun signInAnonymously(): FirebaseSignInResponse
     suspend fun linkAccount(email: String, password: String)
-    suspend fun createUser(email: String, password: String)
+    suspend fun createUser(email: String, password: String): FirebaseSignInResponse
     suspend fun deleteAccount()
     suspend fun signOut(): SignOutResponse
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.micodes.sickleraid.data.remote.DataProvider
@@ -42,11 +43,13 @@ import com.micodes.sickleraid.presentation.common.ext.textButton
 import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
 import com.micodes.sickleraid.presentation.auth.signup.SignUpViewModel
 import com.micodes.sickleraid.presentation.common.composable.GoogleSignInButton
+import com.micodes.sickleraid.presentation.navgraph.Screen
 
 
 @Composable
 fun LoginScreen(
     openAndPopUp: (String, String) -> Unit,
+    navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = hiltViewModel(),
 ) {
@@ -78,7 +81,7 @@ fun LoginScreen(
         uiState = uiState,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
-        onSignInClick = { viewModel.onSignInClick(openAndPopUp) },
+        onSignInClick = { authViewModel.validateCredentialsAndSignIn(uiState.email, uiState.password) },
         onForgotPasswordClick = viewModel::onForgotPasswordClick,
         onGoogleSignInClick = authViewModel::oneTapSignIn
     )
@@ -109,10 +112,27 @@ fun LoginScreen(
         is Response.Success -> signInWithGoogleResponse.data?.let { authResult ->
             Log.i("Login:GoogleSignIn", "Success: $authResult")
             viewModel.loginState.value = false
+            navController.navigate(Screen.HomeScreen.route)
 
         }
         is Response.Failure -> {
             Log.e("Login:GoogleSignIn", "${signInWithGoogleResponse.e}")
+        }
+    }
+
+    when (val logInResponse = DataProvider.signInWithEmailResponse) {
+        is Response.Loading -> {
+            Log.i("Create User:Email and password", "Loading")
+            AuthLoginProgressIndicator()
+        }
+
+        is Response.Success -> logInResponse.data?.let { authResult ->
+            Log.i("Login", "Success: $authResult")
+            navController.navigate(Screen.HomeScreen.route)
+        }
+
+        is Response.Failure -> {
+            Log.e("Create User:Email and password", "${logInResponse.e}")
         }
     }
 }
@@ -151,4 +171,5 @@ fun LoginScreenContent(
 
 
     }
+
 }

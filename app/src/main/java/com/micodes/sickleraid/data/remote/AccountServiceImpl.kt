@@ -51,15 +51,29 @@ class AccountServiceImpl @Inject constructor(
             awaitClose { auth.removeAuthStateListener(listener) }
         }
 
-    override suspend fun authenticate(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).await()
+    override suspend fun logInWithEmailAndPassword(email: String, password: String) : FirebaseSignInResponse{
+        val credential = EmailAuthProvider.getCredential(email, password)
+        return authenticateUser(credential)
     }
 
-    override suspend fun createUser(email: String, password: String) {
-        try {
-            auth.createUserWithEmailAndPassword(email, password).await()
-        } catch (e: FirebaseAuthException) {
-            throw Exception("Failed to create account: ${e.message}", e)
+    override suspend fun createUser(email: String, password: String): FirebaseSignInResponse {
+        val credential = EmailAuthProvider.getCredential(email, password)
+        if (auth.currentUser != null) {
+            return authLink(credential)
+        } else {
+            return try {
+                val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+                authResult?.user?.let { user ->
+                    Log.i(
+                        TAG,
+                        "FirebaseAuthSuccess: UID created with email and password: ${user.uid}"
+                    )
+                }
+                Response.Success(authResult)
+            } catch (error: Exception) {
+                Log.e(TAG, "Failed to create account: ${error.message}")
+                Response.Failure(error)
+            }
         }
     }
 

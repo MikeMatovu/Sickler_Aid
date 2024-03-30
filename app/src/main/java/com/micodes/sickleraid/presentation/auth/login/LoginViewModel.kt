@@ -32,22 +32,14 @@ class LoginViewModel @Inject constructor(
         uiState.value = uiState.value.copy(password = newValue)
     }
 
-    fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
-        if (!email.isValidEmail()) {
-            SnackbarManager.showMessage("Email Error")
-            return
-        }
-
-        if (password.isBlank()) {
-            SnackbarManager.showMessage("Empty password error")
-            return
-        }
-
-        viewModelScope.launch {
-            accountService.authenticate(email, password)
-            openAndPopUp("SETTINGS_SCREEN", "LOGIN_SCREEN")
-        }
-    }
+//    fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
+//
+//
+//        viewModelScope.launch {
+//            accountService.signInWithEmailAndPassword(email, password)
+//            openAndPopUp("SETTINGS_SCREEN", "LOGIN_SCREEN")
+//        }
+//    }
 
     fun onForgotPasswordClick() {
         if (!email.isValidEmail()) {

@@ -27,7 +27,7 @@ fun SymptomsScreen() {
                 actions = listOf {
                     IconButton(onClick = { /* TODO */ }) {
                         Image(
-                            painter = painterResource(id = R.drawable.test_img),
+                            painter = painterResource(id = R.drawable.ic_app),
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )

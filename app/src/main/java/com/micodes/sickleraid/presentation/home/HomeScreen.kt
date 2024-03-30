@@ -45,6 +45,7 @@ import androidx.navigation.compose.rememberNavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
+import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.auth.login.LoginScreen
 import com.micodes.sickleraid.presentation.auth.login.LoginViewModel
 import com.micodes.sickleraid.presentation.auth.signup.SignUpViewModel
@@ -58,7 +59,7 @@ import com.micodes.sickleraid.presentation.navgraph.Screen
 @Composable
 fun HomeScreen(
     navController: NavController,
-    authViewModel: SignUpViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel()
 //    state: HomeState  TODO: Add Home state
 ) {
 
@@ -69,7 +70,7 @@ fun HomeScreen(
             TopAppBarComposable(
                 title = {
                     Image(
-                        painter = painterResource(id = R.drawable.test_img), //TODO: add image
+                        painter = painterResource(id = R.drawable.ic_app), //TODO: add image
                         contentDescription = "Logo",
                         modifier = Modifier.fillMaxWidth(0.4f)
                     )
@@ -94,7 +95,7 @@ fun HomeScreen(
                     {
                         IconButton(onClick = { /* TODO */ }) {
                             Image(
-                                painter = painterResource(id = R.drawable.test_img),
+                                painter = painterResource(id = R.drawable.ic_profile),
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -103,37 +104,6 @@ fun HomeScreen(
                 )
             )
         },
-///
-//                {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Cast,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Outlined.Notifications,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Search,
-//                            contentDescription = null
-//                        )
-//                    }
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.ic_launcher_foreground), //TODO: Add image
-//                            contentDescription = null,
-//                            modifier = Modifier
-//                                .size(24.dp)
-//                                .clip(CircleShape)
-//                        )
-//                    }
-//                }
-//            )
 //        bottomBar = {
 //            AppBottomBarComposable()
 //        },
@@ -192,6 +162,7 @@ fun HomeScreen(
                 ContentListItem()
                 ContentListItem()
             }
+
             //DUmmy content to be replaced
             Button(onClick = {
                 navController.navigate(Screen.SignUpScreen.route)
@@ -236,7 +207,6 @@ fun HomeScreen(
             //End dummy content
         }
         //MOre dummy content
-        val testvm: LoginViewModel = hiltViewModel()
         AnimatedVisibility(visible = openLoginDialog.value) {
             Dialog(
                 onDismissRequest = { openLoginDialog.value = false },
@@ -245,10 +215,10 @@ fun HomeScreen(
                 )
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen(openAndPopUp = { email, password ->
+                    LoginScreen(navController = navController, openAndPopUp = { email, password ->
                         // Mock implementation for openAndPopUp
                         println("Email: $email, Password: $password")
-                    }, testvm)
+                    },)
                 }
             }
         }

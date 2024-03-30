@@ -27,10 +27,32 @@ import com.micodes.sickleraid.presentation.home.HomeScreen
 import com.micodes.sickleraid.presentation.navgraph.Screen
 import com.micodes.sickleraid.presentation.navigator.components.BottomNavigationItem
 import com.micodes.sickleraid.presentation.navigator.components.SicklerCareBottomNavigation
+import com.micodes.sickleraid.presentation.onboarding.GetStarted
+import com.micodes.sickleraid.presentation.onboarding.UserOnBoardPage
 import com.micodes.sickleraid.presentation.profile.ProfileScreen
 import com.micodes.sickleraid.presentation.symptoms.SymptomsScreen
 
 
+//TODO
+//@Composable
+//fun OnBoardingNavigator() {
+//    val navController = rememberNavController()
+//    NavHost(
+//        navController = navController,
+//        startDestination = Screen.GetStartedScreen.route
+//    ) {
+//        composable(route = Screen.GetStartedScreen.route) {
+//            GetStarted(navController = navController)
+//        }
+//        composable(route = Screen.UserOnBoardingScreen.route) {
+//            UserOnBoardPage(navController = navController)
+//        }
+//        composable(route = Screen.HomeScreen.route) {
+//            SicklerCareNavigator()
+//        }
+//    }
+//
+//}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SicklerCareNavigator() {
@@ -102,6 +124,7 @@ fun SicklerCareNavigator() {
             startDestination = Screen.HomeScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
+
             composable(route = Screen.HomeScreen.route) {
                 HomeScreen(navController = navController)
             }
@@ -117,7 +140,6 @@ fun SicklerCareNavigator() {
             composable(route = Screen.News.route) {
                 DoctorDetailsScreen()
             }
-
         }
 
     }
