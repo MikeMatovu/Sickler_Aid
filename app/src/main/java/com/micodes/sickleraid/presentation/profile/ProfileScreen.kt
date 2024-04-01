@@ -12,21 +12,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import coil.compose.rememberAsyncImagePainter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import com.micodes.sickleraid.presentation.profile.composable.DefaultButton
 import com.micodes.sickleraid.presentation.profile.composable.Header
+import com.micodes.sickleraid.presentation.profile.composable.InformationCard
 import com.micodes.sickleraid.presentation.profile.composable.ProfileAvatar
 import com.micodes.sickleraid.presentation.profile.composable.SpaceHorizontal16
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical24
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical32
 import com.micodes.sickleraid.presentation.profile.composable.TextButton
-import com.micodes.sickleraid.presentation.profile.composable.InformationCard
 
 @Composable
 fun ProfileScreen(
