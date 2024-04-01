@@ -1,4 +1,4 @@
-package com.micodes.sickleraid.presentation.profile.composable
+package com.micodes.sickleraid.presentation.common.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

@@ -17,10 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,37 +31,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.auth.login.LoginScreen
-import com.micodes.sickleraid.presentation.auth.login.LoginViewModel
-import com.micodes.sickleraid.presentation.auth.signup.SignUpViewModel
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.home.components.ContentListItem
 import com.micodes.sickleraid.presentation.home.components.ContentRow
 import com.micodes.sickleraid.presentation.home.components.SectionTitle
 import com.micodes.sickleraid.presentation.navgraph.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
+    drawerState: DrawerState,
     authViewModel: AuthViewModel = hiltViewModel()
 //    state: HomeState  TODO: Add Home state
 ) {
+
+    val scope = rememberCoroutineScope()
 
     val openLoginDialog = remember { mutableStateOf(false) }
     val authState = DataProvider.authState
@@ -93,20 +94,23 @@ fun HomeScreen(
                         }
                     },
                     {
-                        IconButton(onClick = { /* TODO */ }) {
+                        IconButton(onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+                        }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_profile),
                                 contentDescription = null,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
                             )
                         }
                     }
                 )
             )
         },
-//        bottomBar = {
-//            AppBottomBarComposable()
-//        },
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
     ) { paddingValues ->
@@ -120,9 +124,21 @@ fun HomeScreen(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                ContentRow(modifier = Modifier)
+                ContentRow(
+                    title = "Medical records",
+                    onButtonClick = {
+                        navController.navigate(Screen.MedicalRecords.route)
+                    },
+                    modifier = Modifier
+                )
                 Spacer(modifier = Modifier.height(16.dp))
-                ContentRow(modifier = Modifier)
+                ContentRow(
+                    title = "Daily Checkup",
+                    onButtonClick = {
+                        navController.navigate(Screen.DailyCheckup.route)
+                    },
+                    modifier = Modifier
+                )
             }
 
             SectionTitle("Medication List")
@@ -138,6 +154,7 @@ fun HomeScreen(
                 ContentListItem()
             }
 
+            //TODO GET RESOURCES FROM https://www.sicklecelldisease.org/support-and-community/links-resources/
             SectionTitle("My support")
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -164,23 +181,7 @@ fun HomeScreen(
             }
 
             //DUmmy content to be replaced
-            Button(onClick = {
-                navController.navigate(Screen.SignUpScreen.route)
-            }) {
-                Text(text = "Sign Up")
-            }
 
-            if (authState == AuthState.SignedIn) {
-                Text(
-                    DataProvider.user?.displayName ?: "Name Placeholder",
-                    fontWeight = FontWeight.Bold
-                )
-                Text(DataProvider.user?.email ?: "Email Placeholder")
-            } else {
-                Text(
-                    "Sign-in to view data!"
-                )
-            }
 
             Button(
                 onClick = {
@@ -215,10 +216,9 @@ fun HomeScreen(
                 )
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen(navController = navController, openAndPopUp = { email, password ->
-                        // Mock implementation for openAndPopUp
-                        println("Email: $email, Password: $password")
-                    },)
+                    LoginScreen(
+                        navController = navController,
+                    )
                 }
             }
         }
@@ -230,7 +230,7 @@ fun HomeScreen(
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
+//    HomeScreen(navController = rememberNavController())
 
 }
 

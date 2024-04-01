@@ -23,7 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ContentRow(modifier: Modifier) {
+fun ContentRow(
+    title: String,
+    onButtonClick: () -> Unit,
+    modifier: Modifier
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,7 +48,7 @@ fun ContentRow(modifier: Modifier) {
                     contentDescription = "Medical Info"
                 )
                 Text(
-                    text = "Medical Information",
+                    text = title,
                     modifier = Modifier.padding(16.dp),
                     fontWeight = FontWeight.Bold
                 )
@@ -52,7 +56,7 @@ fun ContentRow(modifier: Modifier) {
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = onButtonClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
@@ -66,5 +70,5 @@ fun ContentRow(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun ContentRowPreview() {
-    ContentRow(modifier = Modifier)
+    ContentRow(onButtonClick = {}, title ="Test", modifier = Modifier)
 }

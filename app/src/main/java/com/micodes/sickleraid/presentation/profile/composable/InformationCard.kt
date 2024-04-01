@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.micodes.sickleraid.presentation.common.composable.BasicField
 
 @Composable
 fun InformationCard(
@@ -30,18 +31,16 @@ fun InformationCard(
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Normal,
-                fontSize = 9.sp
+                fontSize = 16.sp
             )
-            BasicTextField(
-                value = information,
-                onValueChange = onTextChange
-            )
+
+            BasicField(text = information, value = information, onNewValue = onTextChange)
         }
     }
 }

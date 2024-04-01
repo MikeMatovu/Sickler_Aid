@@ -24,7 +24,7 @@ fun SectionTitle(
         modifier = Modifier.padding(16.dp)
     ) {
         Text(
-            text = "Medication List",
+            text = sectionTitle,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleMedium
         )

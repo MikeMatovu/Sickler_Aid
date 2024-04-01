@@ -48,7 +48,6 @@ import com.micodes.sickleraid.presentation.navgraph.Screen
 
 @Composable
 fun LoginScreen(
-    openAndPopUp: (String, String) -> Unit,
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = hiltViewModel(),
@@ -100,6 +99,8 @@ fun LoginScreen(
         is Response.Failure -> LaunchedEffect(Unit) {
             Log.e("Login:OneTap", "${oneTapSignInResponse.e}")
         }
+
+        else -> {}
     }
 
     when (val signInWithGoogleResponse = DataProvider.googleSignInResponse) {
@@ -118,6 +119,8 @@ fun LoginScreen(
         is Response.Failure -> {
             Log.e("Login:GoogleSignIn", "${signInWithGoogleResponse.e}")
         }
+
+        else -> {}
     }
 
     when (val logInResponse = DataProvider.signInWithEmailResponse) {
@@ -134,6 +137,8 @@ fun LoginScreen(
         is Response.Failure -> {
             Log.e("Create User:Email and password", "${logInResponse.e}")
         }
+
+        else -> {}
     }
 }
 

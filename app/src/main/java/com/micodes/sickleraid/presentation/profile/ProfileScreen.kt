@@ -1,10 +1,9 @@
 package com.micodes.sickleraid.presentation.profile
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,11 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.micodes.sickleraid.presentation.profile.composable.DefaultButton
+import com.micodes.sickleraid.presentation.common.composable.BasicButton
+import com.micodes.sickleraid.presentation.common.composable.BasicField
+import com.micodes.sickleraid.presentation.common.composable.ProfileAvatar
+import com.micodes.sickleraid.presentation.common.ext.basicButton
 import com.micodes.sickleraid.presentation.profile.composable.Header
-import com.micodes.sickleraid.presentation.profile.composable.InformationCard
-import com.micodes.sickleraid.presentation.profile.composable.ProfileAvatar
-import com.micodes.sickleraid.presentation.profile.composable.SpaceHorizontal16
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical24
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical32
 import com.micodes.sickleraid.presentation.profile.composable.TextButton
@@ -33,10 +32,9 @@ fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsState()
     ProfileContent(
-        state = state,
+        uiState = state,
         onChangeFirstName = viewModel::onChangeFirstName,
         onChangeLastName = viewModel::onChangeLastName,
-        onChangeLocation = viewModel::onChangeLocation,
         onChangeEmail = viewModel::onChangeEmail,
         onChangePhone = viewModel::onChangePhone,
         onSaveUserInfo = viewModel::onSaveUserInfo
@@ -45,19 +43,19 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileContent(
-    state: ProfileUiState,
+    uiState: ProfileUiState,
     onChangeFirstName: (String) -> Unit,
     onChangeLastName: (String) -> Unit,
-    onChangeLocation: (String) -> Unit,
     onChangeEmail: (String) -> Unit,
     onChangePhone: (String) -> Unit,
     onSaveUserInfo: () -> Unit,
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 32.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header(
@@ -67,7 +65,7 @@ private fun ProfileContent(
         SpaceVertical32()
 
         ProfileAvatar(
-            painter = rememberAsyncImagePainter(model = state.profilePictureLink),
+            painter = rememberAsyncImagePainter(model = uiState.profilePictureLink),
 
             size = 128
         )
@@ -76,41 +74,36 @@ private fun ProfileContent(
         TextButton(text = "Change profile Picture") {}
         SpaceVertical32()
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Box(modifier = Modifier.weight(1F)) {
-                InformationCard(
-                    title = "First Name",
-                    information = state.firstName,
-                    onTextChange = onChangeFirstName
-                )
-            }
-            SpaceHorizontal16()
-            Box(modifier = Modifier.weight(1F)) {
-                InformationCard(
-                    title = "Last Name",
-                    information = state.lastName,
-                    onTextChange = onChangeLastName
-                )
-            }
-        }
-        InformationCard(
-            title = "Location",
-            information = state.location,
-            onTextChange = onChangeLocation
+        BasicField(
+            modifier = Modifier.padding(8.dp),
+            text = "First Name",
+            value = uiState.firstName,
+            onNewValue = onChangeFirstName
         )
-        InformationCard(
-            title = "Email",
-            information = state.email,
-            onTextChange = onChangeEmail
+        BasicField(
+            modifier = Modifier.padding(8.dp),
+            text = "Last Name",
+            value = uiState.lastName,
+            onNewValue = onChangeLastName
         )
-        InformationCard(
-            title = "Phone Number",
-            information = state.phone,
-            onTextChange = onChangePhone
+        BasicField(
+            modifier = Modifier.padding(8.dp),
+            text = "Email",
+            value = uiState.email,
+            onNewValue = onChangeEmail
+        )
+        BasicField(
+            modifier = Modifier.padding(8.dp),
+            text = "Phone Number",
+            value = uiState.phone,
+            onNewValue = onChangePhone
         )
 
-        Spacer(modifier = Modifier.weight(1F))
-        DefaultButton(buttonText = "Save", onClick = onSaveUserInfo)
+        Spacer(modifier = Modifier.weight(1f))
+        BasicButton(
+            "UPDATE PROFILE",
+            Modifier.basicButton()
+        ) { onSaveUserInfo() }
     }
 }
 

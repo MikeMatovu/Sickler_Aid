@@ -15,6 +15,8 @@ sealed class Screen(val route:String){
     object News:Screen("news")
 
     object Videos:Screen("videos")
+    object DailyCheckup:Screen("dailycheckup")
+    object MedicalRecords:Screen("medicalrecords")
 
     object AppNavigation:Screen("appnavigation")
     object OnBoardingNavigation:Screen("onboardingnavigation")

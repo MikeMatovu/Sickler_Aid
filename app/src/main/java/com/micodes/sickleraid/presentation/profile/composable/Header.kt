@@ -24,13 +24,13 @@ fun Header(
             text = title,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Medium,
-            fontSize = 18.sp
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(
             text = subtitle,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

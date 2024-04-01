@@ -1,34 +1,28 @@
 package com.micodes.sickleraid.presentation.main_activity
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraph
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.micodes.sickleraid.SicklerAidTheme
+import com.micodes.sickleraid.presentation.common.composable.AppDrawerContent
 import com.micodes.sickleraid.presentation.common.snackbar.SnackbarManager
-import com.micodes.sickleraid.presentation.home.HomeScreen
-import com.micodes.sickleraid.presentation.auth.login.LoginScreen
-import com.micodes.sickleraid.presentation.navgraph.Screen
-import com.micodes.sickleraid.presentation.auth.signup.SignUpScreen
 import com.micodes.sickleraid.presentation.navgraph.AppNavGraph
-import com.micodes.sickleraid.presentation.navigator.SicklerCareNavigator
+import com.micodes.sickleraid.ui.theme.SicklerAidTheme
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -41,30 +35,34 @@ fun SicklerAidApp() {
 
         Surface(color = MaterialTheme.colorScheme.background) {
             val appState = rememberAppState()
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-            Scaffold(
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = snackbarHostState,
-                        modifier = Modifier.padding(8.dp),
-                        snackbar = { snackbarData ->
-                            Snackbar(
-                                snackbarData,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                    )
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    AppDrawerContent(drawerState = drawerState)
                 },
-            ) { innerPaddingModifier ->
-
-//                NavHost(
-//                    navController = appState.navController,
-//                    startDestination = Screen.HomeScreen.route,
-//                    modifier = Modifier.padding(innerPaddingModifier)
-//                ) {
-//                    sicklerAidGraph(appState)
-//                }
-                AppNavGraph(startDestination = viewModel.startDestination.value , modifier = Modifier.padding(innerPaddingModifier))
+            ) {
+                Scaffold(
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = snackbarHostState,
+                            modifier = Modifier.padding(8.dp),
+                            snackbar = { snackbarData ->
+                                Snackbar(
+                                    snackbarData,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                        )
+                    },
+                ) { innerPaddingModifier ->
+                    AppNavGraph(
+                        startDestination = viewModel.startDestination.value,
+                        drawerState = drawerState,
+                        modifier = Modifier.padding(innerPaddingModifier)
+                    )
+                }
             }
         }
     }
@@ -81,20 +79,3 @@ fun rememberAppState(
         SicklerAidAppState(navController, snackbarManager, coroutineScope)
     }
 
-
-//Not being used currently
-fun NavGraphBuilder.sicklerAidGraph(appState: SicklerAidAppState) {
-    composable(Screen.HomeScreen.route) {
-//        HomeScreen(navController = appState.navController)
-        SicklerCareNavigator()
-    }
-    composable(Screen.LoginScreen.route) {
-//        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-    composable(Screen.SignUpScreen.route) {
-//        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-
-}
