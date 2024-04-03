@@ -4,7 +4,7 @@ import androidx.room.Dao
 import java.util.Date
 
 @Dao
-interface SicklerDao{
+interface SicklerAidDao{
 
 //      EXAMPLE
 //    @Query("SELECT * FROM  TRANSACTION_TABLE LIMIT 1000")
