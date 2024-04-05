@@ -28,7 +28,6 @@ import com.micodes.sickleraid.presentation.common.composable.CenterAlignedTopApp
 import com.micodes.sickleraid.presentation.common.composable.UnderlineTextField
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical32
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyCheckupScreen(
     navController: NavController,
