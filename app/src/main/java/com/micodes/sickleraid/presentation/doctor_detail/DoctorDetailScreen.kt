@@ -47,14 +47,17 @@ fun DoctorDetailsScreen(
 
     val state by viewModel.state.collectAsState()
     DoctorDetailContent(
-        state = state
+        state = state,
+        viewModel = viewModel
+
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DoctorDetailContent(
-    state: DoctorDetailsState
+    state: DoctorDetailsState,
+    viewModel: DoctorDetailViewModel
 ) {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
@@ -98,7 +101,11 @@ fun DoctorDetailContent(
             OverViewSection()
 
             Spacer(modifier = Modifier.weight(1f))
-            ActionButton()
+            ActionButton(
+                onClick = {
+                    viewModel.insertDoctor()
+                }
+            )
 
 
         }

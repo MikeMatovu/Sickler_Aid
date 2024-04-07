@@ -1,6 +1,5 @@
 package com.micodes.sickleraid.presentation.navgraph
 
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,11 +14,9 @@ import com.micodes.sickleraid.presentation.navigator.SicklerCareNavigator
 import com.micodes.sickleraid.presentation.onboarding.GetStarted
 import com.micodes.sickleraid.presentation.onboarding.UserOnBoardPage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavGraph(
     startDestination: String,
-    drawerState: DrawerState,
     modifier: Modifier
 ) {
     val appState = rememberAppState()
@@ -40,7 +37,9 @@ fun AppNavGraph(
             }
 
             composable(Screen.SignUpScreen.route) {
-                SignUpScreen(navController = navController, openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+                SignUpScreen(
+                    navController = navController,
+                    openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
             }
         }
 
@@ -48,8 +47,9 @@ fun AppNavGraph(
             route = Screen.AppNavigation.route,
             startDestination = Screen.HomeScreen.route
         ) {
+
             composable(route = Screen.HomeScreen.route) {
-                SicklerCareNavigator(drawerState)
+                SicklerCareNavigator(mainNavController = navController)
             }
         }
 

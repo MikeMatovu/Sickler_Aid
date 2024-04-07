@@ -17,33 +17,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
+import com.micodes.sickleraid.presentation.navgraph.Screen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDrawerContent(
     drawerState: DrawerState,
+    navController: NavController,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val authState = DataProvider.authState
     val scope = rememberCoroutineScope()
     ModalDrawerSheet {
-        if (authState == AuthState.SignedIn) {
-            Text(
-                DataProvider.user?.displayName ?: "Name Placeholder",
-                fontWeight = FontWeight.Bold
-            )
-            Text(DataProvider.user?.email ?: "Email Placeholder")
-        } else {
-            Text(
-                "Sign-in to view data!"
-            )
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -62,9 +56,10 @@ fun AppDrawerContent(
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
-            label = { Text(text = "Navigation Item") },
+            label = { Text(text = "Edit profile") },
             selected = false,
             onClick = {
+                navController.navigate(Screen.Symptoms.route)
                 scope.launch {
                     drawerState.close()
                 }
@@ -91,25 +86,6 @@ fun AppDrawerContent(
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
-        when (val signOutResponse = DataProvider.signOutResponse) {
-            // 1.
-            is Response.Loading -> {
-                Log.i("Sign Out:", "Loading")
-                AuthLoginProgressIndicator()
-            }
-            // 2.
-            is Response.Success -> signOutResponse.data?.let { signOutResult ->
-                LaunchedEffect(signOutResult) {
-//                    launch(signOutResult)
-                    Log.i("Sign Out:", signOutResult.toString())
-                }
-            }
 
-            is Response.Failure -> LaunchedEffect(Unit) {
-                Log.e("Login:OneTap", "${signOutResponse.e}")
-            }
-
-            else -> {}
-        }
     }
 }

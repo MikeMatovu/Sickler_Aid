@@ -1,5 +1,6 @@
 package com.micodes.sickleraid.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,14 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,11 +25,13 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,7 +39,9 @@ import androidx.navigation.NavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
+import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
+import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.home.components.ContentGrid
 import com.micodes.sickleraid.presentation.home.components.ContentRow
@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    drawerState: DrawerState,
     authViewModel: AuthViewModel = hiltViewModel()
 //    state: HomeState  TODO: Add Home state
 ) {
@@ -95,11 +94,7 @@ fun HomeScreen(
                     },
                     {
                         IconButton(onClick = {
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isClosed) open() else close()
-                                }
-                            }
+                            navController.navigate(Screen.Videos.route)
                         }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_profile),
@@ -146,9 +141,18 @@ fun HomeScreen(
                 SectionTitle("Medication List")
 
                 val dummyResources2 = listOf(
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
                 )
                 ContentGrid(resources = dummyResources2, height = 150)
             }
@@ -159,12 +163,30 @@ fun HomeScreen(
                 SectionTitle("My support")
 
                 val dummyResources = listOf(
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-                    SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
+                    SupportResource(
+                        title = "Resource 1",
+                        image = painterResource(id = R.drawable.cells)
+                    ),
                 )
                 ContentGrid(resources = dummyResources, height = 300)
             }
@@ -172,17 +194,28 @@ fun HomeScreen(
 
             item {
                 //End dummy content
+
+                if (authState == AuthState.SignedIn) {
+                    Text(
+                        DataProvider.user?.displayName ?: "Name Placeholder",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(DataProvider.user?.email ?: "Email Placeholder")
+                } else {
+                    Text(
+                        "Sign-in to view data!"
+                    )
+                }
                 Button(
-//                    onClick = {
-//                        if (authState != AuthState.SignedIn)
-//                            openLoginDialog.value = true
-//                        else
-//                            authViewModel.signOut()
-//                    },
                     onClick = {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Snackbar")
-                        }
+                        if (authState != AuthState.SignedIn)
+                            openLoginDialog.value = true
+                        else
+                            scope.launch {
+                                authViewModel.signOut()
+                                snackbarHostState.showSnackbar("LOGOUT")
+                            }
+
                     },
 
                     modifier = Modifier
@@ -190,12 +223,37 @@ fun HomeScreen(
                         .padding(horizontal = 16.dp),
                     shape = RoundedCornerShape(10.dp),
 
-                ) {
+                    ) {
                     Text(
                         text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
                         modifier = Modifier.padding(6.dp),
                         color = MaterialTheme.colorScheme.primary
                     )
+                    when (val signOutResponse = DataProvider.signOutResponse) {
+                        // 1.
+                        is Response.Loading -> {
+                            Log.i("Sign Out:", "Loading")
+                            AuthLoginProgressIndicator()
+                        }
+                        // 2.
+                        is Response.Success -> signOutResponse.data?.let { signOutResult ->
+                            LaunchedEffect(signOutResult) {
+                                Log.i("Sign Out:", signOutResult.toString())
+                                if (signOutResult.toString() == "true") {
+                                    navController.navigate(Screen.LoginScreen.route)
+                                }
+                            }
+                        }
+
+                        is Response.Failure -> LaunchedEffect(Unit) {
+                            Log.e("Login:OneTap", "${signOutResponse.e}")
+                        }
+
+                        else -> {}
+                    }
+                }
+                Button(onClick = { navController.navigate(Screen.Videos.route) }) {
+                    Text(text = "PROFILE")
                 }
 
                 //End dummy content

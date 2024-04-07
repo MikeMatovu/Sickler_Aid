@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.micodes.sickleraid.presentation.common.composable.AppDrawerContent
 import com.micodes.sickleraid.presentation.common.snackbar.SnackbarManager
 import com.micodes.sickleraid.presentation.navgraph.AppNavGraph
 import com.micodes.sickleraid.ui.theme.SicklerAidTheme
@@ -37,33 +35,26 @@ fun SicklerAidApp() {
             val appState = rememberAppState()
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    AppDrawerContent(drawerState = drawerState)
-                },
-            ) {
-                Scaffold(
-                    snackbarHost = {
-                        SnackbarHost(
-                            hostState = snackbarHostState,
-                            modifier = Modifier.padding(8.dp),
-                            snackbar = { snackbarData ->
-                                Snackbar(
-                                    snackbarData,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                        )
-                    },
-                ) { innerPaddingModifier ->
-                    AppNavGraph(
-                        startDestination = viewModel.startDestination.value,
-                        drawerState = drawerState,
-                        modifier = Modifier.padding(innerPaddingModifier)
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        modifier = Modifier.padding(8.dp),
+                        snackbar = { snackbarData ->
+                            Snackbar(
+                                snackbarData,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     )
-                }
+                },
+            ) { innerPaddingModifier ->
+                AppNavGraph(
+                    startDestination = viewModel.startDestination.value,
+                    modifier = Modifier.padding(innerPaddingModifier)
+                )
             }
+
         }
     }
 }
