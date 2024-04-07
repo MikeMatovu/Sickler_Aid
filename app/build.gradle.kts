@@ -88,6 +88,9 @@ dependencies {
     ksp("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    //Logging interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 
     //material icons extended
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
