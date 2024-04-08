@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDatabase
+import com.micodes.sickleraid.data.datasource.database.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +29,13 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNewsDao(
+    fun provideSicklerAidDao(
         sicklerAidDatabase: SicklerAidDatabase
     ): SicklerAidDao = sicklerAidDatabase.sicklerAidDao
+
+    @Provides
+    @Singleton
+    fun provideUserDao(
+        sicklerAidDatabase: SicklerAidDatabase
+    ): UserDao = sicklerAidDatabase.userDao
 }

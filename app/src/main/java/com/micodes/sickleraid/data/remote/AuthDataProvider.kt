@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.firebase.auth.FirebaseUser
+import com.micodes.sickleraid.domain.model.DatabaseOperationResponse
 import com.micodes.sickleraid.domain.model.FirebaseSignInResponse
 import com.micodes.sickleraid.domain.model.OneTapSignInResponse
 import com.micodes.sickleraid.domain.model.Response
@@ -26,6 +27,7 @@ object DataProvider {
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Response.Success(null))
     var createUserResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
     var signInWithEmailResponse by mutableStateOf<FirebaseSignInResponse>(Response.Success(null))
+    var databaseOperationResponse by mutableStateOf<DatabaseOperationResponse>(Response.Success(false))
 
     var user by mutableStateOf<FirebaseUser?>(null)
 

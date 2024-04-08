@@ -208,21 +208,8 @@ fun HomeScreen(
                 }
                 Button(
                     onClick = {
-                        if (authState != AuthState.SignedIn)
-                            openLoginDialog.value = true
-                        else
-                            scope.launch {
-                                authViewModel.signOut()
-                                snackbarHostState.showSnackbar("LOGOUT")
-                            }
 
                     },
-
-                    modifier = Modifier
-                        .size(width = 200.dp, height = 50.dp)
-                        .padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(10.dp),
-
                     ) {
                     Text(
                         text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",

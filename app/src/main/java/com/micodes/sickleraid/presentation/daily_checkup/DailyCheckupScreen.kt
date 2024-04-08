@@ -69,6 +69,8 @@ fun DailyCheckupScreenContent(
                 title = "Medical Records",
                 scrollBehavior = scrollBehavior,
                 profileImage = Icons.Default.Person,
+                buttonText = "Save",
+                onButtonClick = {},
                 onBackPressed = { navController.navigateUp() } // Handle back navigation
             )
         }

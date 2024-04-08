@@ -35,7 +35,7 @@ fun BottomNavHost(
             SymptomsScreen()
         }
         composable(route = Screen.Videos.route) {
-            ProfileScreen()
+            ProfileScreen(navController = navController, mainNavController = mainNavController)
         }
         composable(route = Screen.Insights.route) {
             HealthInsightsScreen()
