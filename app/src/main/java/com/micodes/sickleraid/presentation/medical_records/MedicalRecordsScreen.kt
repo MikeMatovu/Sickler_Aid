@@ -39,6 +39,7 @@ fun MedicalRecordsScreen(
     MedicalRecordsScreenContent(
         uiState = state,
         navController = navController,
+        onSaveClick = viewModel::saveRecords,
         onBirulubinChange = viewModel::onChangeBirulubin,
         onBMIChange = viewModel::onChangeBMI,
         onPlateletsChange = viewModel::onChangePlatelets,
@@ -58,6 +59,7 @@ fun MedicalRecordsScreen(
 fun MedicalRecordsScreenContent(
     uiState: MedicalRecordsState,
     navController: NavController,
+    onSaveClick: () -> Unit,
     onBirulubinChange: (Int) -> Unit,
     onBMIChange: (Int) -> Unit,
     onPlateletsChange: (Int) -> Unit,
@@ -98,7 +100,7 @@ fun MedicalRecordsScreenContent(
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    "Last updated on 3/04/2024",
+                    "Last updated on ${uiState.lastModifiedDateTime}",
                     style = MaterialTheme.typography.headlineSmall
                 )
                 SpaceVertical32()
@@ -155,9 +157,9 @@ fun MedicalRecordsScreenContent(
 
                 SpaceVertical32()
                 BasicButton(
-                    text = "CLICK",
+                    text = "SAVE",
                     modifier = Modifier.fillMaxWidth(),
-                    action = {}
+                    action = onSaveClick
                 )
             }
         }

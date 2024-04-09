@@ -1,7 +1,9 @@
 package com.micodes.sickleraid.di
 
+import com.micodes.sickleraid.data.repository.MedicalRecordsRepositoryImpl
 import com.micodes.sickleraid.data.repository.SicklerAidRepositoryImpl
 import com.micodes.sickleraid.data.repository.UserRepositoryImpl
+import com.micodes.sickleraid.domain.repository.MedicalRecordsRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import com.micodes.sickleraid.domain.repository.UserRepository
 import dagger.Binds
@@ -21,5 +23,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMedicalRecordsRepository(medicalRecordsRepositoryImpl: MedicalRecordsRepositoryImpl): MedicalRecordsRepository
 
 }

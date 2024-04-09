@@ -12,4 +12,5 @@ data class MedicalRecordsState (
     val birulubin: Int = 0,
     val lactateDehydrogenase: Int = 0,
     val platelets: Int = 0,
+    val lastModifiedDateTime: String? = ""
 )
