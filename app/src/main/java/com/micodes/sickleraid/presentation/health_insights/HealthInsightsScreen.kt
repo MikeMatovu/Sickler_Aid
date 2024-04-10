@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,15 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.micodes.sickleraid.R
+import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
-import com.micodes.sickleraid.presentation.health_insights.components.BarChart
 import com.micodes.sickleraid.presentation.health_insights.components.DropDownMenuComposable
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 
@@ -41,7 +39,7 @@ import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 @Preview(showBackground = true)
 @Composable
 fun HealthInsightsScreen() {
-    Scaffold (
+    Scaffold(
         topBar = {
             TopAppBarComposable(
                 title = {
@@ -58,7 +56,7 @@ fun HealthInsightsScreen() {
                 }
             )
         }
-    ){paddingValues ->
+    ) { paddingValues ->
         var selectedPeriod by remember { mutableStateOf(HealthPeriod.WEEKLY) }
 
         Column(
@@ -117,7 +115,7 @@ fun HealthInsightsScreen() {
                 ) {
 
                     // Bar Chart (Sample data, replace with actual data)
-                    BarChart()
+                    BarchartWithSolidBars()
 
                 }
             }
@@ -133,7 +131,7 @@ fun HealthInsightsScreen() {
                 ) {
 
                     // Bar Chart (Sample data, replace with actual data)
-                    BarChart()
+                    BarchartWithSolidBars()
 
                 }
             }
@@ -146,6 +144,12 @@ fun HealthInsightsScreen() {
             HabitItem("Stay hydrated")
             HabitItem("Get enough sleep")
             HabitItem("Exercise regularly")
+
+            //START DUMMY CONTENT HERE
+
+
+
+
         }
     }
 }

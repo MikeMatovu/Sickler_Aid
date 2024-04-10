@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.micodes.sickleraid"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -90,6 +90,9 @@ dependencies {
 
     //Logging interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //YCharts
+    implementation("co.yml:ycharts:2.1.0")
 
 
     //material icons extended

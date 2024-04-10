@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BarChart() {
+fun BarChartContainer() {
     // Replace with your actual data and logic to create a bar chart
     Box(
         modifier = Modifier
