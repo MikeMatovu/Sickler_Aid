@@ -40,11 +40,11 @@ fun DailyCheckupScreen(
         uiState = state,
         navController = navController,
         onChangeTemperature = viewModel::onChangeTemperature,
-        onChangeWeight = viewModel::onChangeWeight,
         onChangeSystolicBloodPressure = viewModel::onChangeSystolicBloodPressure,
         onChangeDiastolicBloodPressure = viewModel::onChangeDiastolicBloodPressure,
         onChangePulseRate = viewModel::onChangePulseRate,
-        onChangeRespiratoryRate = viewModel::onChangeRespiratoryRate
+        onChangeRespiratoryRate = viewModel::onChangeRespiratoryRate,
+        onSubmitCheckup = viewModel::submitCheckup
     )
 }
 
@@ -55,18 +55,18 @@ fun DailyCheckupScreenContent(
     uiState: DailyCheckupState,
     navController: NavController,
     onChangeTemperature: (Int) -> Unit,
-    onChangeWeight: (Int) -> Unit,
     onChangeSystolicBloodPressure: (Int) -> Unit,
     onChangeDiastolicBloodPressure: (Int) -> Unit,
     onChangePulseRate: (Int) -> Unit,
     onChangeRespiratoryRate: (Int) -> Unit,
+    onSubmitCheckup: () -> Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         topBar = {
             CenterAlignedTopAppBarComposable(
-                title = "Medical Records",
+                title = "Daily Checkup",
                 scrollBehavior = scrollBehavior,
                 profileImage = Icons.Default.Person,
                 buttonText = "Save",
@@ -88,6 +88,10 @@ fun DailyCheckupScreenContent(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
+                    "Last updated on ${uiState.lastModifiedDateTime}",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
                     "Keep track of your daily physiological measures. This information will be used to monitor your health.",
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -95,11 +99,6 @@ fun DailyCheckupScreenContent(
                     value = uiState.temperature,
                     label = "Temperature",
                     onValueChange = onChangeTemperature
-                )
-                UnderlineTextField(
-                    value = uiState.weight,
-                    label = "Weight",
-                    onValueChange = onChangeWeight
                 )
                 UnderlineTextField(
                     value = uiState.systolicBloodPressure,
@@ -124,9 +123,9 @@ fun DailyCheckupScreenContent(
 
                 SpaceVertical32()
                 BasicButton(
-                    text = "CLICK",
+                    text = "SUBMIT",
                     modifier = Modifier.fillMaxWidth(),
-                    action = {}
+                    action = onSubmitCheckup
                 )
 
             }

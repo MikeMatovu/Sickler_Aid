@@ -33,9 +33,9 @@ fun ButtonRow() {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(Icons.Filled.StarRate, contentDescription = "Settings")
+                Icon(Icons.Filled.StarRate, contentDescription = "Book")
                 Spacer(modifier = Modifier.padding(horizontal = 2.dp)) //Spacing between icon and text
-                Text("Lorem")
+                Text("Appointment")
             }
         }
 

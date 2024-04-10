@@ -21,8 +21,7 @@ fun OverViewSection() {
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been" +
-                    " the industry's standard dummy text ever since the 1500s, when an unknown",
+            "This is the overview section of the doctor's profile. It contains a brief summary of the doctor's profile.",
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(horizontal = 16.dp)
         )

@@ -40,6 +40,7 @@ fun MedicalRecordsScreen(
         uiState = state,
         navController = navController,
         onSaveClick = viewModel::saveRecords,
+        onWeightChange = viewModel::onChangeWeight,
         onBirulubinChange = viewModel::onChangeBirulubin,
         onBMIChange = viewModel::onChangeBMI,
         onPlateletsChange = viewModel::onChangePlatelets,
@@ -61,6 +62,7 @@ fun MedicalRecordsScreenContent(
     navController: NavController,
     onSaveClick: () -> Unit,
     onBirulubinChange: (Int) -> Unit,
+    onWeightChange: (Int) -> Unit,
     onBMIChange: (Int) -> Unit,
     onPlateletsChange: (Int) -> Unit,
     onPCVChange: (Int) -> Unit,
@@ -101,13 +103,18 @@ fun MedicalRecordsScreenContent(
                 )
                 Text(
                     "Last updated on ${uiState.lastModifiedDateTime}",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 SpaceVertical32()
                 UnderlineTextField(
                     value = uiState.bmi,
                     label = "BMI",
                     onValueChange = onBMIChange,
+                )
+                UnderlineTextField(
+                    value = uiState.weight,
+                    label = "Weight",
+                    onValueChange = onWeightChange,
                 )
 
                 UnderlineTextField(

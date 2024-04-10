@@ -19,6 +19,7 @@ data class MedicalRecords(
     val recordId: Int = 0,
     val userId: String = "",
     val bmi: Int = 0,
+    val weight: Int = 0,
     val packetCellVolume: Int = 0,
     val platelets: Int = 0,
     val birulubin: Int = 0,

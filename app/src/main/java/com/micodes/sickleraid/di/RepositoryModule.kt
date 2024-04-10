@@ -1,8 +1,10 @@
 package com.micodes.sickleraid.di
 
+import com.micodes.sickleraid.data.repository.DailyCheckupRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicalRecordsRepositoryImpl
 import com.micodes.sickleraid.data.repository.SicklerAidRepositoryImpl
 import com.micodes.sickleraid.data.repository.UserRepositoryImpl
+import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
 import com.micodes.sickleraid.domain.repository.MedicalRecordsRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import com.micodes.sickleraid.domain.repository.UserRepository
@@ -28,4 +30,8 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindMedicalRecordsRepository(medicalRecordsRepositoryImpl: MedicalRecordsRepositoryImpl): MedicalRecordsRepository
 
+
+    @Binds
+    @Singleton
+    abstract fun bindDailyCheckupRepository(dailyCheckupRepositoryImpl: DailyCheckupRepositoryImpl): DailyCheckupRepository
 }

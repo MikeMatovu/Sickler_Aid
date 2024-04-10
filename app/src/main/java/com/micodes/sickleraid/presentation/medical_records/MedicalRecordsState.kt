@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.painter.Painter
 
 data class MedicalRecordsState (
     val bmi: Int = 0,
+    val weight: Int = 0,
     val packetCellVolume: Int = 0,
     val peripheralCapillarity: Int = 0,
     val fetalHaemoglobin: Int = 0,

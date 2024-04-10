@@ -51,6 +51,8 @@ class MedicalRecordsViewModel @Inject constructor(
     fun onChangePacketCellVolume(newValue: Int) =
         _state.update { it.copy(packetCellVolume = newValue) }
 
+    fun onChangeWeight(newValue: Int) =
+        _state.update { it.copy(weight = newValue) }
     fun onChangePeripheralCapillarity(newValue: Int) =
         _state.update { it.copy(peripheralCapillarity = newValue) }
 
@@ -74,10 +76,10 @@ class MedicalRecordsViewModel @Inject constructor(
             val currentUser: FirebaseUser? = auth.currentUser
             currentUser?.let { firebaseUser ->
                 val userId = firebaseUser.uid
-                Log.i("User ID", userId) // Log the user ID being used
                 val records = MedicalRecords(
                     userId = userId,
                     bmi = state.value.bmi,
+                    weight = state.value.weight,
                     packetCellVolume = state.value.packetCellVolume,
                     platelets = state.value.platelets,
                     birulubin = state.value.birulubin,
