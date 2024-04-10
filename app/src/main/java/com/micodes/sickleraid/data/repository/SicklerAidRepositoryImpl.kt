@@ -1,15 +1,19 @@
 package com.micodes.sickleraid.data.repository
 
 import androidx.lifecycle.LiveData
+import com.micodes.sickleraid.data.datasource.database.DailyCheckupDao
+import com.micodes.sickleraid.data.datasource.database.MedicalRecordsDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDao
 import com.micodes.sickleraid.domain.model.Doctor
-import com.micodes.sickleraid.domain.model.MedicalRecords
+import com.micodes.sickleraid.domain.model.LatestPatientRecords
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import javax.inject.Inject
 
 open class SicklerAidRepositoryImpl @Inject constructor(
-    val dao: SicklerAidDao
-) : SicklerAidRepository{
+    private val dao: SicklerAidDao,
+    private val dailyCheckupDao: DailyCheckupDao,
+    private val medicalRecordsDao: MedicalRecordsDao
+) : SicklerAidRepository {
     override suspend fun getAllDoctors(): LiveData<List<Doctor>> {
         return dao.getAllDoctors()
     }
@@ -18,7 +22,15 @@ open class SicklerAidRepositoryImpl @Inject constructor(
         dao.upsert(doctor)
     }
 
-    override suspend fun insertMedicalRecords(records: MedicalRecords) {
-        TODO("Not yet implemented")
+    override suspend fun getLatestPatientRecords(userId: String): LatestPatientRecords? {
+        val latestDailyCheckup = dailyCheckupDao.getLatestCheckup(userId)
+        val latestMedicalRecord = medicalRecordsDao.getLatestMedicalRecord(userId)
+
+        return if (latestDailyCheckup != null && latestMedicalRecord != null) {
+            LatestPatientRecords(latestDailyCheckup, latestMedicalRecord)
+        } else {
+            null
+        }
     }
+
 }

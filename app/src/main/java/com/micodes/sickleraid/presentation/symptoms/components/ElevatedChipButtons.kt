@@ -3,7 +3,6 @@ package com.micodes.sickleraid.presentation.symptoms.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ElevatedFilterChip
@@ -27,12 +26,13 @@ fun ElevatedChipButtons(
     FlowRow(
         modifier = Modifier
             .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        chips.forEach { chipItem ->
+        chips.forEachIndexed() { index, chipItem ->
             ElevatedFilterChip(
-                selected = chipItem.isSelected,
-                onClick = { },
+                modifier = Modifier.padding(horizontal = 8.dp),
+                selected = index == selectedChip,
+                onClick = { onChipClick(index) },
                 label = {
                     Text(text = chipItem.label)
                 },
@@ -44,12 +44,11 @@ fun ElevatedChipButtons(
             )
         }
     }
-
-
 }
 
 
 data class ChipData(
     val label: String,
-    val isSelected: Boolean,
+    val frequencySliderValue: Float,
+    val severitySliderValue: Float
 )

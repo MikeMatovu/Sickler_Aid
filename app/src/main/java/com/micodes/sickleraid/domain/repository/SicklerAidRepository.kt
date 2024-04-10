@@ -2,14 +2,16 @@ package com.micodes.sickleraid.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.micodes.sickleraid.domain.model.Doctor
-import com.micodes.sickleraid.domain.model.MedicalRecords
+import com.micodes.sickleraid.domain.model.LatestPatientRecords
 
 interface SicklerAidRepository {
-//Functions
+    //Functions
     suspend fun getAllDoctors(): LiveData<List<Doctor>>
 
     suspend fun upsertDoctor(doctor: Doctor)
 
-    suspend fun insertMedicalRecords(records: MedicalRecords)
+
+    suspend fun getLatestPatientRecords(userId: String): LatestPatientRecords?
+
 
 }

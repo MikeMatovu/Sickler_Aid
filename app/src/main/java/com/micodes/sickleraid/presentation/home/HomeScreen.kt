@@ -26,6 +26,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,10 +55,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
+    homeViewModel: HomeViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = hiltViewModel()
-//    state: HomeState  TODO: Add Home state
 ) {
 
+    val state by homeViewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -214,7 +217,6 @@ fun HomeScreen(
                     Text(
                         text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
                         modifier = Modifier.padding(6.dp),
-                        color = MaterialTheme.colorScheme.primary
                     )
                     when (val signOutResponse = DataProvider.signOutResponse) {
                         // 1.
@@ -239,9 +241,12 @@ fun HomeScreen(
                         else -> {}
                     }
                 }
-                Button(onClick = { navController.navigate(Screen.Videos.route) }) {
-                    Text(text = "PROFILE")
+                Button(onClick = {
+                    homeViewModel.getLatestPatientRecords()
+                }) {
+                    Text(text = "LATEST RECORDS")
                 }
+                Text(text = "Latest Daily Checkup: ${state.latestRecords}")
 
                 //End dummy content
             }
