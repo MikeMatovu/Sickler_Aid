@@ -6,5 +6,6 @@ data class DailyCheckupState(
     val diastolicBloodPressure: Int = 0,
     val pulseRate: Int = 0,
     val respiratoryRate: Int = 0,
-    val lastModifiedDateTime: String? = ""
+    val lastModifiedDateTime: String? = "",
+    val openAlertDialog: Boolean = false,
 )

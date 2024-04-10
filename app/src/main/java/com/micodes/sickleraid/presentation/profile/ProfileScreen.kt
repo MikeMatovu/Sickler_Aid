@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -41,6 +42,7 @@ import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicato
 import com.micodes.sickleraid.presentation.common.composable.BasicButton
 import com.micodes.sickleraid.presentation.common.composable.BasicField
 import com.micodes.sickleraid.presentation.common.composable.CenterAlignedTopAppBarComposable
+import com.micodes.sickleraid.presentation.common.composable.DismissDialogComposable
 import com.micodes.sickleraid.presentation.common.composable.ProfileAvatar
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.ext.basicButton
@@ -64,6 +66,8 @@ fun ProfileScreen(
         viewModel = viewModel,
         navController = navController,
         mainNavController = mainNavController,
+        onDismissDialog = viewModel::onDialogDismiss,
+        openDialog = viewModel::openDialog,
         onChangeFirstName = viewModel::onChangeFirstName,
         onChangeLastName = viewModel::onChangeLastName,
         onChangeEmail = viewModel::onChangeEmail,
@@ -80,6 +84,8 @@ private fun ProfileContent(
     viewModel: ProfileViewModel,
     navController: NavController,
     mainNavController: NavController,
+    onDismissDialog: () -> Unit,
+    openDialog: () -> Unit ,
     onChangeFirstName: (String) -> Unit,
     onChangeLastName: (String) -> Unit,
     onChangeEmail: (String) -> Unit,
@@ -122,6 +128,16 @@ private fun ProfileContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        when {
+            uiState.openAlertDialog -> {
+                DismissDialogComposable(
+                    onDismissRequest = onDismissDialog,
+                    dialogTitle = "Profile",
+                    dialogText = "Profile Saved Successfully",
+                    icon = Icons.Default.Info
+                )
+            }
+        }
         Header(
             title = "Account",
             subtitle = "Edit your profile information",
@@ -173,15 +189,14 @@ private fun ProfileContent(
         when(val databaseOperationResponse = DataProvider.databaseOperationResponse) {
             // 1.
             is Response.Loading ->  {
-                Log.i("Database op:OneTap", "Loading")
+                Log.i("Database operation", "Loading")
                 ProgressIndicatorComposable()
             }
             // 2.
             is Response.Success -> databaseOperationResponse.data?.let { operationResult ->
                 LaunchedEffect(operationResult) {
-//                    launch(operationResult)
                     Log.i("Operation:Database", "Success")
-                    snackbarHostState.showSnackbar("Operation successful")
+                    openDialog()
                 }
             }
             is Response.Failure -> LaunchedEffect(Unit) {
@@ -189,9 +204,10 @@ private fun ProfileContent(
             }
             else -> {}
         }
+        }
     }
 }
-}
+
 
 @Preview(showBackground = true)
 @Composable

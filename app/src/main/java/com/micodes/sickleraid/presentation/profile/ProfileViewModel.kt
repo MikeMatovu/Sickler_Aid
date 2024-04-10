@@ -46,6 +46,12 @@ class ProfileViewModel @Inject constructor(
 
     fun onChangePhone(newValue: String) = _state.update { it.copy(phone = newValue) }
 
+    fun openDialog() = _state.update { it.copy(openAlertDialog = true) }
+    fun onDialogDismiss()  {
+        _state.update { it.copy(openAlertDialog = false) }
+        DataProvider.databaseOperationResponse = Response.Success(null)
+    }
+
     private fun updateFirebaseDisplayName(firstName: String, lastName: String) {
         val currentUser: FirebaseUser? = auth.currentUser
         currentUser?.updateProfile(userProfileChangeRequest {

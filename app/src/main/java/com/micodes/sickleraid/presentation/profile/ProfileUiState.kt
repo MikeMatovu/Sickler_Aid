@@ -6,5 +6,6 @@ data class ProfileUiState(
     val location: String = "",
     val email: String = "",
     val phone: String = "",
-    val profilePictureLink: String = ""
+    val profilePictureLink: String = "",
+    val openAlertDialog: Boolean = false,
 )

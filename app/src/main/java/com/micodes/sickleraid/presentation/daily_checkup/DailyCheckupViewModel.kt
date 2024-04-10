@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.domain.model.DailyCheckup
+import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
 import com.micodes.sickleraid.domain.services.AccountService
 import com.micodes.sickleraid.util.timestampToDateTime
@@ -50,6 +52,12 @@ class DailyCheckupViewModel @Inject constructor(
     fun onChangePulseRate(newValue: Int) = _state.update { it.copy(pulseRate = newValue) }
     fun onChangeRespiratoryRate(newValue: Int) = _state.update { it.copy(respiratoryRate = newValue) }
 
+    fun openDialog() = _state.update { it.copy(openAlertDialog = true) }
+    fun onDialogDismiss()  {
+        _state.update { it.copy(openAlertDialog = false) }
+        DataProvider.databaseOperationResponse = Response.Success(null)
+    }
+
     fun submitCheckup() {
         viewModelScope.launch {
             val currentUser: FirebaseUser? = auth.currentUser
@@ -63,7 +71,7 @@ class DailyCheckupViewModel @Inject constructor(
                     pulseRate = currentState.pulseRate,
                     respiratoryRate = currentState.respiratoryRate
                 )
-                 dailyCheckupRepository.insertDailyCheckup(checkup)
+                DataProvider.databaseOperationResponse = dailyCheckupRepository.insertDailyCheckup(checkup)
             }
         }
 

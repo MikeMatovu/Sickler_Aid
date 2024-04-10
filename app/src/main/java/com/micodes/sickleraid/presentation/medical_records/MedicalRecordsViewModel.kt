@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.domain.model.MedicalRecords
+import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.domain.repository.MedicalRecordsRepository
 import com.micodes.sickleraid.domain.services.AccountService
 import com.micodes.sickleraid.util.timestampToDateTime
@@ -71,8 +73,19 @@ class MedicalRecordsViewModel @Inject constructor(
 
     fun onChangePlatelets(newValue: Int) = _state.update { it.copy(platelets = newValue) }
 
+    fun onDialogConfirm() {
+//        saveRecords()
+        _state.update { it.copy(openAlertDialog = false) }
+    }
+    fun openDialog() = _state.update { it.copy(openAlertDialog = true) }
+    fun onDialogDismiss()  {
+        _state.update { it.copy(openAlertDialog = false) }
+        DataProvider.databaseOperationResponse = Response.Success(null)
+    }
+
     fun saveRecords() {
         viewModelScope.launch {
+            DataProvider.databaseOperationResponse = Response.Loading
             val currentUser: FirebaseUser? = auth.currentUser
             currentUser?.let { firebaseUser ->
                 val userId = firebaseUser.uid
@@ -88,7 +101,7 @@ class MedicalRecordsViewModel @Inject constructor(
                     meanCorpuscularVolume = state.value.meanCorpuscularVolume,
                     aat = state.value.alanineAminotransferase,
                 )
-                medicalRecordsRepository.insertMedicalRecords(records)
+                DataProvider.databaseOperationResponse = medicalRecordsRepository.insertMedicalRecords(records)
             }
         }
     }

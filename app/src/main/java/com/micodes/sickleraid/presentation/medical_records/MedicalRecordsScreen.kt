@@ -1,5 +1,6 @@
 package com.micodes.sickleraid.presentation.medical_records
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,8 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.micodes.sickleraid.data.remote.DataProvider
+import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.presentation.common.composable.BasicButton
 import com.micodes.sickleraid.presentation.common.composable.CenterAlignedTopAppBarComposable
+import com.micodes.sickleraid.presentation.common.composable.DismissDialogComposable
+import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.UnderlineTextField
 import com.micodes.sickleraid.presentation.profile.composable.SpaceVertical32
 
@@ -40,6 +47,8 @@ fun MedicalRecordsScreen(
         uiState = state,
         navController = navController,
         onSaveClick = viewModel::saveRecords,
+        openDialog = viewModel::openDialog,
+        onDismissDialog = viewModel::onDialogDismiss,
         onWeightChange = viewModel::onChangeWeight,
         onBirulubinChange = viewModel::onChangeBirulubin,
         onBMIChange = viewModel::onChangeBMI,
@@ -61,6 +70,8 @@ fun MedicalRecordsScreenContent(
     uiState: MedicalRecordsState,
     navController: NavController,
     onSaveClick: () -> Unit,
+    openDialog: () -> Unit ,
+    onDismissDialog: () -> Unit,
     onBirulubinChange: (Int) -> Unit,
     onWeightChange: (Int) -> Unit,
     onBMIChange: (Int) -> Unit,
@@ -97,6 +108,16 @@ fun MedicalRecordsScreenContent(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
+                when {
+                    uiState.openAlertDialog -> {
+                        DismissDialogComposable(
+                            onDismissRequest = onDismissDialog,
+                            dialogTitle = "Medical records",
+                            dialogText = "Saved Medical Records",
+                            icon = Icons.Default.Info
+                        )
+                    }
+                }
                 Text(
                     text = "Medical records",
                     style = MaterialTheme.typography.headlineMedium
@@ -168,6 +189,25 @@ fun MedicalRecordsScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     action = onSaveClick
                 )
+
+                when(val databaseOperationResponse = DataProvider.databaseOperationResponse) {
+                    // 1.
+                    is Response.Loading ->  {
+                        Log.i("Database operation", "Loading")
+                        ProgressIndicatorComposable()
+                    }
+                    // 2.
+                    is Response.Success -> databaseOperationResponse.data?.let { operationResult ->
+                        LaunchedEffect(operationResult) {
+                            Log.i("Operation:Database", "Success")
+                            openDialog()
+                        }
+                    }
+                    is Response.Failure -> LaunchedEffect(Unit) {
+                        Log.e("Operation:Database", "${databaseOperationResponse.e}")
+                    }
+                    else -> {}
+                }
             }
         }
     }
