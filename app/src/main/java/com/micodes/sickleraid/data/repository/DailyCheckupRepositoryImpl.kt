@@ -4,6 +4,7 @@ import com.micodes.sickleraid.data.datasource.database.DailyCheckupDao
 import com.micodes.sickleraid.domain.model.DailyCheckup
 import com.micodes.sickleraid.domain.model.DatabaseOperationResponse
 import com.micodes.sickleraid.domain.model.Response
+import com.micodes.sickleraid.domain.model.TemperatureRecord
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
 
 import javax.inject.Inject
@@ -22,5 +23,9 @@ open class DailyCheckupRepositoryImpl @Inject constructor(
 
     override suspend fun getLatestCheckup(userId: String): DailyCheckup? {
         return dailyCheckupDao.getLatestCheckup(userId)
+    }
+
+    override suspend fun getTemperatureRecords(userId: String): List<TemperatureRecord> {
+        return dailyCheckupDao.getTemperatureRecords(userId)
     }
 }
