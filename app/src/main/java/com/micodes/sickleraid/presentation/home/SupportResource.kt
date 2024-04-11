@@ -1,8 +1,10 @@
 package com.micodes.sickleraid.presentation.home
 
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.painter.Painter
 
 data class SupportResource(
     val title: String,
-    val image: Painter
+    @DrawableRes val imageResourceId: Int,
+    val url: String
 )

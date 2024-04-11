@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,9 +59,10 @@ fun ContentGrid(resources: List<SupportResource>, height: Int) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = resource.image,
+                        painter = painterResource(id = resource.imageResourceId),
                         contentDescription = resource.title,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+//                        contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = resource.title)
@@ -101,7 +103,7 @@ fun ContentGrid2(resources: List<SupportResource>) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Image(
-                                    painter = resource.image,
+                                    painter = painterResource(id = resource.imageResourceId),
                                     contentDescription = resource.title,
                                     modifier = Modifier.size(48.dp)
                                 )
@@ -123,12 +125,12 @@ fun ContentGrid2(resources: List<SupportResource>) {
 @Composable
 fun PreviewContentGrid() {
     val dummyResources = listOf(
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
-        SupportResource(title = "Resource 1", image = painterResource(id = R.drawable.cells)),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
+        SupportResource(title = "Resource 1", url = "", imageResourceId = R.drawable.cells),
 
         )
     ContentGrid(resources = dummyResources, height = 200)

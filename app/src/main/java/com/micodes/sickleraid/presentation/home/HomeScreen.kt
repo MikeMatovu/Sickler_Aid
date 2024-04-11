@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.Search
@@ -44,12 +43,12 @@ import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
+import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.home.components.ContentGrid
 import com.micodes.sickleraid.presentation.home.components.ContentRow
 import com.micodes.sickleraid.presentation.home.components.SectionTitle
 import com.micodes.sickleraid.presentation.navgraph.Screen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,52 +145,36 @@ fun HomeScreen(
                 val dummyResources2 = listOf(
                     SupportResource(
                         title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
+                        url = "",
+                        imageResourceId = R.drawable.cells
                     ),
                     SupportResource(
                         title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
+                        url = "",
+                        imageResourceId = R.drawable.cells
                     ),
                     SupportResource(
                         title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
+                        url = "",
+                        imageResourceId = R.drawable.cells
                     ),
                 )
-                ContentGrid(resources = dummyResources2, height = 150)
+                if (state.isLoading) {
+                    ProgressIndicatorComposable()
+                } else {
+                    ContentGrid(resources = dummyResources2, height = 150)
+                }
             }
 
             item {
 
-                //TODO GET RESOURCES FROM https://www.sicklecelldisease.org/support-and-community/links-resources/
                 SectionTitle("My support")
+                if (state.isLoading) {
+                    ProgressIndicatorComposable()
+                } else {
+                    ContentGrid(resources = state.supportResources, height = 300)
+                }
 
-                val dummyResources = listOf(
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        image = painterResource(id = R.drawable.cells)
-                    ),
-                )
-                ContentGrid(resources = dummyResources, height = 300)
             }
 
 
@@ -213,7 +196,7 @@ fun HomeScreen(
                     onClick = {
 
                     },
-                    ) {
+                ) {
                     Text(
                         text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
                         modifier = Modifier.padding(6.dp),

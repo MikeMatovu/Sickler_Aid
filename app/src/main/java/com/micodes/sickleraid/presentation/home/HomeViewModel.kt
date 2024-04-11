@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.micodes.sickleraid.R
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
+import com.micodes.sickleraid.util.RESOURCES_URL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +25,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         getLatestPatientRecords()
+        getEducationalMaterials()
     }
+
     //Functions
     fun getLatestPatientRecords() {
         viewModelScope.launch {
@@ -35,4 +39,39 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getEducationalMaterials() {
+        viewModelScope.launch {
+            _state.value =
+                state.value.copy(isLoading = true) // Set isLoading to true before loading data
+            val htmlContent = repository.fetchHtmlContent(RESOURCES_URL)
+            val educationalMaterials = repository.scrapeEducationalMaterials(htmlContent)
+            _state.update {
+                it.copy(
+                    educationalMaterials = educationalMaterials,
+                    isLoading = false // Set isLoading to false after loading data
+                )
+            }
+            // Update the supportResources list with the title and url of the first 6 educational materials. Do not update the imageResourceId
+
+
+            updateSupportResourcesList(educationalMaterials.take(6).map { (title, url) ->
+                SupportResource(
+                    title = title,
+                    imageResourceId = R.drawable.resource_img_6,
+                    url = url
+                )
+            })
+
+
+        }
+    }
+
+    private fun updateSupportResourcesList(supportResources: List<SupportResource>) {
+        _state.update { it.copy(supportResources = supportResources) }
+    }
+
+
+
+
 }

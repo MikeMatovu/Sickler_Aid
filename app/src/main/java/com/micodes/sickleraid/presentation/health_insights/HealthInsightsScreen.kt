@@ -1,7 +1,6 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,13 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,16 +29,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
+import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
+import com.micodes.sickleraid.presentation.health_insights.HealthInsightsViewModel
 import com.micodes.sickleraid.presentation.health_insights.components.DropDownMenuComposable
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Preview(showBackground = true)
 @Composable
-fun HealthInsightsScreen() {
+fun HealthInsightsScreen(
+    viewModel: HealthInsightsViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
     Scaffold(
         topBar = {
             TopAppBarComposable(
@@ -114,8 +119,12 @@ fun HealthInsightsScreen() {
                     modifier = Modifier.padding(16.dp)
                 ) {
 
-                    // Bar Chart (Sample data, replace with actual data)
-                    BarchartWithSolidBars()
+
+                    if (state.isLoading) {
+                        ProgressIndicatorComposable()
+                    } else {
+                        BarchartWithSolidBars(state.barData)
+                    }
 
                 }
             }
@@ -130,11 +139,17 @@ fun HealthInsightsScreen() {
                     modifier = Modifier.padding(16.dp)
                 ) {
 
-                    // Bar Chart (Sample data, replace with actual data)
-                    BarchartWithSolidBars()
+                    if (state.isLoading) {
+                        ProgressIndicatorComposable()
+                    } else {
+                        BarchartWithSolidBars(state.barData)
+                    }
 
                 }
+
+
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -145,9 +160,13 @@ fun HealthInsightsScreen() {
             HabitItem("Get enough sleep")
             HabitItem("Exercise regularly")
 
+
+            //  Refresh test button
+            Button(onClick = { viewModel.refreshData() }) {
+                Text(text = "REFRESH")
+            }
+
             //START DUMMY CONTENT HERE
-
-
 
 
         }

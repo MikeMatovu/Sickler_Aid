@@ -94,6 +94,9 @@ dependencies {
     //YCharts
     implementation("co.yml:ycharts:2.1.0")
 
+    //Jsoup
+    implementation("org.jsoup:jsoup:1.14.3")
+
 
     //material icons extended
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
