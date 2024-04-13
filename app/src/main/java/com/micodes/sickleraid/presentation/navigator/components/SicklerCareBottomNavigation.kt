@@ -49,7 +49,7 @@ fun SicklerCareBottomNavigation(
 
             3 -> navigateToTab(
                 navController = navController,
-                route = Screen.News.route
+                route = Screen.Medicine.route
             )
         }
     }
@@ -63,7 +63,7 @@ fun SicklerCareBottomNavigation(
         Screen.HomeScreen.route -> 0
         Screen.Symptoms.route -> 1
         Screen.Insights.route -> 2
-        Screen.News.route -> 3
+        Screen.Medicine.route -> 3
         else -> 0
     }
     NavigationBar(

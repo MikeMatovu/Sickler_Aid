@@ -12,6 +12,7 @@ import com.micodes.sickleraid.presentation.daily_checkup.DailyCheckupScreen
 import com.micodes.sickleraid.presentation.doctor_detail.DoctorDetailsScreen
 import com.micodes.sickleraid.presentation.home.HomeScreen
 import com.micodes.sickleraid.presentation.medical_records.MedicalRecordsScreen
+import com.micodes.sickleraid.presentation.medicine.MedicineScreen
 import com.micodes.sickleraid.presentation.navgraph.Screen
 import com.micodes.sickleraid.presentation.profile.ProfileScreen
 import com.micodes.sickleraid.presentation.symptoms.SymptomsScreen
@@ -34,11 +35,14 @@ fun BottomNavHost(
         composable(route = Screen.Symptoms.route) {
             SymptomsScreen()
         }
-        composable(route = Screen.Videos.route) {
+        composable(route = Screen.Profile.route) {
             ProfileScreen(navController = navController, mainNavController = mainNavController)
         }
         composable(route = Screen.Insights.route) {
             HealthInsightsScreen()
+        }
+        composable(route = Screen.Medicine.route) {
+            MedicineScreen(navController = navController)
         }
         composable(route = Screen.News.route) {
             DoctorDetailsScreen(navController = navController)

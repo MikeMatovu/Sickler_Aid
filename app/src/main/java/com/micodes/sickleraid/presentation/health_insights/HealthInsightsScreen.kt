@@ -118,14 +118,11 @@ fun HealthInsightsScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-
-
                     if (state.isLoading) {
                         ProgressIndicatorComposable()
                     } else {
                         BarchartWithSolidBars(state.barData)
                     }
-
                 }
             }
 
@@ -149,7 +146,6 @@ fun HealthInsightsScreen(
 
 
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 

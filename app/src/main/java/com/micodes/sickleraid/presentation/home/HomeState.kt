@@ -3,7 +3,7 @@ package com.micodes.sickleraid.presentation.home
 import com.micodes.sickleraid.R
 
 data class HomeState(
-    var latestRecords :String = "",
+    var latestRecords: String = "",
     var educationalMaterials: List<Pair<String, String>> = emptyList(),
     var supportResources: List<SupportResource> = listOf(
         SupportResource(
@@ -37,6 +37,29 @@ data class HomeState(
             url = ""
         ),
 
-    ),
+        ),
+    var medicineList: List<MedicineResource> = listOf<MedicineResource>(
+        MedicineResource(
+            name = "Hydroxurea",
+            quantity = 0
+        ),
+        MedicineResource(
+            name = "Hydroxurea",
+            quantity = 0
+        ),
+        MedicineResource(
+            name = "Hydroxurea",
+            quantity = 0
+        ),
+        MedicineResource(
+            name = "Hydroxurea",
+            quantity = 0
+        ),
+        MedicineResource(
+            name = "Hydroxurea",
+            quantity = 0
+        ),
+
+        ),
     var isLoading: Boolean = false
 )

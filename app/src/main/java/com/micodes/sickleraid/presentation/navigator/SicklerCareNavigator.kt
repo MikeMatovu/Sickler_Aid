@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoGraph
+import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.material.icons.outlined.Outbound
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material.icons.rounded.Home
@@ -26,7 +27,7 @@ fun SicklerCareNavigator(mainNavController: NavHostController) {
             BottomNavigationItem(icon = Icons.Rounded.Home, text = "Home"),
             BottomNavigationItem(icon = Icons.Outlined.Outbound, text = "Symptoms"),
             BottomNavigationItem(icon = Icons.Outlined.AutoGraph, text = "Insights"),
-            BottomNavigationItem(icon = Icons.Outlined.VideoLibrary, text = "Video"),
+            BottomNavigationItem(icon = Icons.Outlined.MedicalServices, text = "Medicine"),
         )
     }
     val navController = rememberNavController()
