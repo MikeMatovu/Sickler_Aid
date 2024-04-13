@@ -8,3 +8,8 @@ data class SupportResource(
     @DrawableRes val imageResourceId: Int,
     val url: String
 )
+
+data class MedicineResource(
+    val name: String,
+    val quantity: Int
+)

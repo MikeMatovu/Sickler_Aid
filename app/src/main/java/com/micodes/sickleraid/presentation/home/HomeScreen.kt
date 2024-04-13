@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,12 +45,13 @@ import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
-import com.micodes.sickleraid.presentation.home.components.ContentGrid
 import com.micodes.sickleraid.presentation.home.components.ContentRow
+import com.micodes.sickleraid.presentation.home.components.MedicineRow
+import com.micodes.sickleraid.presentation.home.components.ResourcesRow
 import com.micodes.sickleraid.presentation.home.components.SectionTitle
 import com.micodes.sickleraid.presentation.navgraph.Screen
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -58,6 +59,7 @@ fun HomeScreen(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
     val state by homeViewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -146,7 +148,7 @@ fun HomeScreen(
                     SupportResource(
                         title = "Resource 1",
                         url = "",
-                        imageResourceId = R.drawable.cells
+                        imageResourceId = R.drawable.resource_img_6
                     ),
                     SupportResource(
                         title = "Resource 1",
@@ -162,7 +164,7 @@ fun HomeScreen(
                 if (state.isLoading) {
                     ProgressIndicatorComposable()
                 } else {
-                    ContentGrid(resources = dummyResources2, height = 150)
+                    MedicineRow(medicines = state.medicineList, onMedicineClick = {})
                 }
             }
 
@@ -172,7 +174,10 @@ fun HomeScreen(
                 if (state.isLoading) {
                     ProgressIndicatorComposable()
                 } else {
-                    ContentGrid(resources = state.supportResources, height = 300)
+                    ResourcesRow(resources = state.supportResources) { url ->
+                        // Handle resource click
+                        homeViewModel.onResourceClicked(context, url)
+                    }
                 }
 
             }
@@ -201,28 +206,6 @@ fun HomeScreen(
                         text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
                         modifier = Modifier.padding(6.dp),
                     )
-                    when (val signOutResponse = DataProvider.signOutResponse) {
-                        // 1.
-                        is Response.Loading -> {
-                            Log.i("Sign Out:", "Loading")
-                            AuthLoginProgressIndicator()
-                        }
-                        // 2.
-                        is Response.Success -> signOutResponse.data?.let { signOutResult ->
-                            LaunchedEffect(signOutResult) {
-                                Log.i("Sign Out:", signOutResult.toString())
-                                if (signOutResult.toString() == "true") {
-                                    navController.navigate(Screen.LoginScreen.route)
-                                }
-                            }
-                        }
-
-                        is Response.Failure -> LaunchedEffect(Unit) {
-                            Log.e("Login:OneTap", "${signOutResponse.e}")
-                        }
-
-                        else -> {}
-                    }
                 }
                 Button(onClick = {
                     homeViewModel.getLatestPatientRecords()
