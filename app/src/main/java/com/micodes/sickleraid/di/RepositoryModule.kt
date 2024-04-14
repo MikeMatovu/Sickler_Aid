@@ -34,4 +34,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindDailyCheckupRepository(dailyCheckupRepositoryImpl: DailyCheckupRepositoryImpl): DailyCheckupRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMedicineRepository(medicalRecordsRepositoryImpl: MedicalRecordsRepositoryImpl): MedicalRecordsRepository
 }
