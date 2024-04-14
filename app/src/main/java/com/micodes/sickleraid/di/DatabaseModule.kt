@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.micodes.sickleraid.data.datasource.database.DailyCheckupDao
 import com.micodes.sickleraid.data.datasource.database.MedicalRecordsDao
+import com.micodes.sickleraid.data.datasource.database.MedicineDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDatabase
 import com.micodes.sickleraid.data.datasource.database.UserDao
@@ -52,4 +53,10 @@ object DatabaseModule {
     fun provideDailyCheckup(
         sicklerAidDatabase: SicklerAidDatabase
     ): DailyCheckupDao = sicklerAidDatabase.dailyCheckupDao
+
+    @Provides
+    @Singleton
+    fun provideMedicine(
+        sicklerAidDatabase: SicklerAidDatabase
+    ): MedicineDao = sicklerAidDatabase.medicineDao
 }

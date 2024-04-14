@@ -27,7 +27,7 @@ fun SicklerCareNavigator(mainNavController: NavHostController) {
             BottomNavigationItem(icon = Icons.Rounded.Home, text = "Home"),
             BottomNavigationItem(icon = Icons.Outlined.Outbound, text = "Symptoms"),
             BottomNavigationItem(icon = Icons.Outlined.AutoGraph, text = "Insights"),
-            BottomNavigationItem(icon = Icons.Outlined.MedicalServices, text = "Medicine"),
+            BottomNavigationItem(icon = Icons.Outlined.MedicalServices, text = "MedicineTable"),
         )
     }
     val navController = rememberNavController()

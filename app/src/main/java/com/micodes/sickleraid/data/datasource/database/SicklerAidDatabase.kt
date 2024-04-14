@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import com.micodes.sickleraid.domain.model.DailyCheckup
 import com.micodes.sickleraid.domain.model.Doctor
 import com.micodes.sickleraid.domain.model.MedicalRecords
+import com.micodes.sickleraid.domain.model.MedicineTable
 import com.micodes.sickleraid.domain.model.PatientTable
 import com.micodes.sickleraid.domain.model.UserDetails
 
@@ -17,9 +18,10 @@ import com.micodes.sickleraid.domain.model.UserDetails
         Doctor::class,
         UserDetails::class,
         MedicalRecords::class,
-        DailyCheckup::class
+        DailyCheckup::class,
+        MedicineTable::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 abstract class SicklerAidDatabase : RoomDatabase() {
@@ -28,5 +30,6 @@ abstract class SicklerAidDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val medicalRecordsDao: MedicalRecordsDao
     abstract val dailyCheckupDao: DailyCheckupDao
+    abstract val medicineDao: MedicineDao
 
 }

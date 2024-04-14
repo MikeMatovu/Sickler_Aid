@@ -1,5 +1,6 @@
 package com.micodes.sickleraid.presentation.health_insights
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.axis.DataCategoryOptions
@@ -40,15 +41,22 @@ class HealthInsightsViewModel @Inject constructor(
                 val userId = firebaseUser.uid
                 try {
                     val temperatureRecords = dailyCheckupRepository.getTemperatureRecords(userId)
-                    _state.value = state.value.copy(
-                        temperatureRecords = temperatureRecords,
-                        barData = getTemperatureBarChartData(
-                            temperatureRecords,
-                            BarChartType.VERTICAL,
-                            DataCategoryOptions()
-                        ),
-                        isLoading = false // Set isLoading to false after loading data
-                    )
+                    if (temperatureRecords.isEmpty()) {
+                        _state.value = state.value.copy(
+                            isEmpty = true,
+                            isLoading = false // Set isLoading to false after loading data
+                        )
+                    } else {
+                        _state.value = state.value.copy(
+                            temperatureRecords = temperatureRecords,
+                            barData = getTemperatureBarChartData(
+                                temperatureRecords,
+                                BarChartType.VERTICAL,
+                                DataCategoryOptions()
+                            ),
+                            isLoading = false // Set isLoading to false after loading data
+                        )
+                    }
                 } catch (e: Exception) {
                     _state.value = state.value.copy(
                         error = e,

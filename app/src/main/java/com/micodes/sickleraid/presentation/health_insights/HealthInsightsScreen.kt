@@ -121,7 +121,15 @@ fun HealthInsightsScreen(
                     if (state.isLoading) {
                         ProgressIndicatorComposable()
                     } else {
-                        BarchartWithSolidBars(state.barData)
+                        if (state.isEmpty) {
+                            Text(
+                                text = "No data available!, please input your records",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        } else {
+                            BarchartWithSolidBars(state.barData)
+                        }
                     }
                 }
             }
@@ -139,7 +147,15 @@ fun HealthInsightsScreen(
                     if (state.isLoading) {
                         ProgressIndicatorComposable()
                     } else {
-                        BarchartWithSolidBars(state.barData)
+                        if (state.isEmpty) {
+                            Text(
+                                text = "No data available! , please input your records",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        } else {
+                            BarchartWithSolidBars(state.barData)
+                        }
                     }
 
                 }

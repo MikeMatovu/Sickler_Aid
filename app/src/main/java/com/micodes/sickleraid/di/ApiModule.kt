@@ -1,6 +1,5 @@
 package com.micodes.sickleraid.di
 
-import com.micodes.sickleraid.data.datasource.api.AppApi
 import com.micodes.sickleraid.util.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -34,10 +33,5 @@ object ApiModule {
         return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(client).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideAppApi(retrofit: Retrofit): AppApi {
-        return retrofit.create(AppApi::class.java)
-    }
 
 }

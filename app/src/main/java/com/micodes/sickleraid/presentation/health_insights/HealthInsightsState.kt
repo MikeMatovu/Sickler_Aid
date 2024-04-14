@@ -7,5 +7,6 @@ data class HealthInsightsState(
     val temperatureRecords: List<TemperatureRecord> = emptyList(),
     val barData: List<BarData> = emptyList(),
     val isLoading: Boolean = true,
+    val isEmpty: Boolean = false,
     val error: Throwable? = null
 )
