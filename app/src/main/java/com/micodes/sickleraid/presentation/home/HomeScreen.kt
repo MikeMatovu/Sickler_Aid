@@ -1,6 +1,8 @@
 package com.micodes.sickleraid.presentation.home
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -49,14 +51,18 @@ import com.micodes.sickleraid.presentation.home.components.ContentRow
 import com.micodes.sickleraid.presentation.home.components.MedicineRow
 import com.micodes.sickleraid.presentation.home.components.ResourcesRow
 import com.micodes.sickleraid.presentation.home.components.SectionTitle
+import com.micodes.sickleraid.presentation.main_activity.MainViewModel
 import com.micodes.sickleraid.presentation.navgraph.Screen
 
-
+//TODO: Move auth viewmodel to main viewmodel
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
+
 ) {
 
     val context = LocalContext.current
@@ -207,12 +213,26 @@ fun HomeScreen(
                         modifier = Modifier.padding(6.dp),
                     )
                 }
-                Button(onClick = {
-                    homeViewModel.getLatestPatientRecords()
-                }) {
-                    Text(text = "LATEST RECORDS")
+//                Button(onClick = {
+//                    homeViewModel.getLatestPatientRecords()
+//                }) {
+//                    Text(text = "LATEST RECORDS")
+//                }
+//                Text(text = "Latest Daily Checkup: ${state.latestRecords}")
+
+                Button(onClick = { mainViewModel.showSimpleNotification(context = context, title = "Hello user", message = "Wafiquan") }) {
+                    Text(text = "Simple Notification")
                 }
-                Text(text = "Latest Daily Checkup: ${state.latestRecords}")
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(onClick = {
+                    mainViewModel.updateSimpleNotification(context = context)
+                }) {
+                    Text(text = "Update Notification")
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(onClick = {mainViewModel.cancelSimpleNotification(context = context) }) {
+                    Text(text = "Cancel Notification")
+                }
 
                 //End dummy content
             }
