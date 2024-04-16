@@ -12,6 +12,7 @@ data class Medicine(
 data class MedicineUiState(
     var isLoading: Boolean = true,
     var openAlertDialog: Boolean = false,
+    var isTimeDialogShown: Boolean = false,
     var medicineList: List<Medicine> = emptyList()
 )
 

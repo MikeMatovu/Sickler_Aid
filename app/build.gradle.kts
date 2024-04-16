@@ -101,6 +101,9 @@ dependencies {
     //material icons extended
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
 
+    //Material 3 time picker
+    implementation("com.marosseleng.android:compose-material3-datetime-pickers:0.7.2")
+
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
