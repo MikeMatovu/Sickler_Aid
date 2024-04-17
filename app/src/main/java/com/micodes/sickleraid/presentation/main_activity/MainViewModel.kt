@@ -16,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import com.micodes.sickleraid.domain.services.AccountService
 import com.micodes.sickleraid.presentation.navgraph.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +26,9 @@ class MainViewModel @Inject constructor(
     private val notificationBuilder: NotificationCompat.Builder,
     private val notificationManager: NotificationManagerCompat
 ) : ViewModel() {
+
+    private val _splashCondition = mutableStateOf(true)
+    val splashCondition: State<Boolean> = _splashCondition
 
     private val _startDestination = mutableStateOf(Screen.OnBoardingNavigation.route)
     val startDestination: State<String> = _startDestination
@@ -39,6 +43,8 @@ class MainViewModel @Inject constructor(
             val isSignedIn = accountService.hasUser
             _startDestination.value =
                 if (isSignedIn) Screen.AppNavigation.route else Screen.OnBoardingNavigation.route
+            delay(300)
+            _splashCondition.value = false
         }
     }
 

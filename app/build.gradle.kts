@@ -75,6 +75,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
 
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.6.0")
@@ -96,6 +97,13 @@ dependencies {
 
     //Jsoup
     implementation("org.jsoup:jsoup:1.14.3")
+
+    //system ui controller
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.4-beta")
+
+
+    //iText pdf
+    implementation("com.itextpdf:itext7-core:7.2.0")
 
 
     //material icons extended
