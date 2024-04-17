@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +40,9 @@ import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.health_insights.HealthInsightsViewModel
 import com.micodes.sickleraid.presentation.health_insights.components.DropDownMenuComposable
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
+import com.micodes.sickleraid.presentation.health_insights.components.PrintReportBtn
+import java.io.InputStream
+import java.io.OutputStream
 
 @Preview(showBackground = true)
 @Composable
@@ -44,6 +50,8 @@ fun HealthInsightsScreen(
     viewModel: HealthInsightsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBarComposable(
@@ -181,6 +189,33 @@ fun HealthInsightsScreen(
             //START DUMMY CONTENT HERE
 
 
+            val pdfUri = state.pdfUri
+
+            PrintReportBtn { uri ->
+                viewModel.updatePdfUri(uri)
+            }
+
+            pdfUri?.let { uri ->
+                LaunchedEffect(uri) {
+                    val sourceUri = viewModel.generatePdfReport(context)
+                    sourceUri?.let {
+                        var outputStream: OutputStream? = null
+                        var inputStream: InputStream? = null
+                        try {
+                            outputStream = context.contentResolver.openOutputStream(uri)
+                            inputStream = context.contentResolver.openInputStream(it)
+                            if (outputStream != null) {
+                                inputStream?.copyTo(outputStream)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("PDF", "Exception when copying PDF", e)
+                        } finally {
+                            outputStream?.close()
+                            inputStream?.close()
+                        }
+                    }
+                }
+            }
         }
     }
 }

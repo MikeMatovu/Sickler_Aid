@@ -1,7 +1,6 @@
 package com.micodes.sickleraid.presentation.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,10 +24,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -42,9 +39,7 @@ import androidx.navigation.NavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
-import com.micodes.sickleraid.domain.model.Response
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
-import com.micodes.sickleraid.presentation.auth.signup.AuthLoginProgressIndicator
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
 import com.micodes.sickleraid.presentation.home.components.ContentRow
@@ -69,9 +64,8 @@ fun HomeScreen(
     val state by homeViewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-
-    val openLoginDialog = remember { mutableStateOf(false) }
     val authState = DataProvider.authState
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -194,7 +188,7 @@ fun HomeScreen(
 
                 if (authState == AuthState.SignedIn) {
                     Text(
-                        DataProvider.user?.displayName ?: "Name Placeholder",
+                        text = DataProvider.user?.displayName ?: "Name Placeholder",
                         fontWeight = FontWeight.Bold
                     )
                     Text(DataProvider.user?.email ?: "Email Placeholder")
@@ -220,37 +214,28 @@ fun HomeScreen(
 //                }
 //                Text(text = "Latest Daily Checkup: ${state.latestRecords}")
 
-                Button(onClick = { mainViewModel.showSimpleNotification(context = context, title = "Hello user", message = "Wafiquan") }) {
+                Button(onClick = {
+                    mainViewModel.showSimpleNotification(
+                        context = context,
+                        title = "Hello user",
+                        message = "Wafiquan"
+                    )
+                }) {
                     Text(text = "Simple Notification")
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Button(onClick = {
-                    mainViewModel.updateSimpleNotification(context = context)
-                }) {
-                    Text(text = "Update Notification")
+                Button(onClick = { }) {
+                    Text(text = "Generate PDF")
                 }
+
                 Spacer(modifier = Modifier.height(12.dp))
-                Button(onClick = {mainViewModel.cancelSimpleNotification(context = context) }) {
+                Button(onClick = { mainViewModel.cancelSimpleNotification(context = context) }) {
                     Text(text = "Cancel Notification")
                 }
 
                 //End dummy content
             }
-            //MOre dummy content
-//            AnimatedVisibility(visible = openLoginDialog.value) {
-//                Dialog(
-//                    onDismissRequest = { openLoginDialog.value = false },
-//                    properties = DialogProperties(
-//                        usePlatformDefaultWidth = false
-//                    )
-//                ) {
-//                    Surface(modifier = Modifier.fillMaxSize()) {
-//                        LoginScreen(
-//                            navController = navController,
-//                        )
-//                    }
-//                }
-//            }
+
 
         }
 
@@ -258,6 +243,7 @@ fun HomeScreen(
     }
 
 }
+
 
 @Composable
 @Preview

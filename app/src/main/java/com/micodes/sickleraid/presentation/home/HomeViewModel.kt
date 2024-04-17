@@ -117,7 +117,6 @@ class HomeViewModel @Inject constructor(
         return resourceIds.resourceIds[randomIndex]
     }
 
-
 }
 
 
