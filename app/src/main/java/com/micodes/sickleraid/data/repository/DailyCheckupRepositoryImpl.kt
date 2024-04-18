@@ -25,6 +25,10 @@ open class DailyCheckupRepositoryImpl @Inject constructor(
         return dailyCheckupDao.getLatestCheckup(userId)
     }
 
+    override suspend fun getAllCheckups(userId: String): List<DailyCheckup> {
+        return dailyCheckupDao.getAllCheckup(userId)
+    }
+
     override suspend fun getTemperatureRecords(userId: String): List<TemperatureRecord> {
         return dailyCheckupDao.getTemperatureRecords(userId)
     }

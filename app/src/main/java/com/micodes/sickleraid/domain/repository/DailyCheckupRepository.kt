@@ -10,5 +10,7 @@ interface DailyCheckupRepository {
 
     suspend fun getLatestCheckup(userId: String): DailyCheckup?
 
+    suspend fun getAllCheckups(userId: String): List<DailyCheckup>
+
     suspend fun getTemperatureRecords(userId: String): List<TemperatureRecord>
 }

@@ -13,6 +13,9 @@ interface DailyCheckupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecords(records: DailyCheckup)
 
+    @Query("SELECT * FROM daily_checkup WHERE userId = :userId ORDER BY timestamp DESC")
+    suspend fun getAllCheckup(userId: String): List<DailyCheckup>
+
     @Query("SELECT * FROM daily_checkup WHERE userId = :userId ORDER BY timestamp DESC LIMIT 1")
     suspend fun getLatestCheckup(userId: String): DailyCheckup?
 
