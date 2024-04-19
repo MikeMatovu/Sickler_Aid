@@ -16,7 +16,7 @@ import co.yml.charts.ui.barchart.models.BarStyle
 @Composable
 fun BarchartWithSolidBars(barData: List<BarData>){
     val maxRange = 100
-    val barDat = DataUtils.getBarChartData(50, maxRange, BarChartType.VERTICAL, DataCategoryOptions())
+    val fakeBarData = DataUtils.getBarChartData(50, maxRange, BarChartType.VERTICAL, DataCategoryOptions())
     val yStepSize = 10
 
     val xAxisData = AxisData.Builder()

@@ -1,5 +1,7 @@
 package com.micodes.sickleraid.di
 
+import com.micodes.sickleraid.data.remote.PredictionRemoteDataSource
+import com.micodes.sickleraid.data.remote.RetrofitPredictionRemoteDataSource
 import com.micodes.sickleraid.data.repository.DailyCheckupRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicalRecordsRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicineRepositoryImpl
@@ -40,4 +42,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMedicineRepository(medicineRepositoryImpl: MedicineRepositoryImpl): MedicineRepository
+
+
+    //TODO remove this below
+    @Binds
+    @Singleton
+    abstract fun bindPredictionRemoteDataSource(dataSource: RetrofitPredictionRemoteDataSource): PredictionRemoteDataSource
 }

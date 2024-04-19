@@ -1,4 +1,6 @@
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,13 +44,16 @@ import com.micodes.sickleraid.presentation.health_insights.HealthInsightsViewMod
 import com.micodes.sickleraid.presentation.health_insights.components.DropDownMenuComposable
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 import com.micodes.sickleraid.presentation.health_insights.components.PrintReportBtn
+import com.micodes.sickleraid.presentation.main_activity.MainViewModel
 import java.io.InputStream
 import java.io.OutputStream
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(showBackground = true)
 @Composable
 fun HealthInsightsScreen(
-    viewModel: HealthInsightsViewModel = hiltViewModel()
+    viewModel: HealthInsightsViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -105,20 +111,34 @@ fun HealthInsightsScreen(
                     modifier = Modifier.padding(8.dp)
                 )
                 LinearProgressIndicator(
-                    progress = 0.67f,
+                    progress = state.prediction,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
 
                     )
+                if (state.prediction > 0.5) {
+                    mainViewModel.showSimpleNotification(
+                        context = context,
+                        title = "High risk",
+                        message = "You are at a high risk of getting a crisis today, consider taking the" +
+                                "required steps and book appointment with doctor"
+                    )
+                }
                 Text(
-                    text = "67% of health",
+                    text = "${state.prediction * 100}% possibility of a crisis",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(8.dp)
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Weekly insights graph",
+                modifier = Modifier
+                    .padding(8.dp),
+                style = MaterialTheme.typography.headlineMedium
+            )
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -144,6 +164,12 @@ fun HealthInsightsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             //Second bar chart for other stats
+            Text(
+                text = "Weekly temperature graph",
+                modifier = Modifier
+                    .padding(8.dp),
+                style = MaterialTheme.typography.headlineMedium
+            )
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

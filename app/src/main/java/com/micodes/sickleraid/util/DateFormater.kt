@@ -9,3 +9,9 @@ fun timestampToDateTime(timestamp: Long): String {
     val date = Date(timestamp)
     return sdf.format(date)
 }
+
+fun getCurrentDateTime(): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val date = Date(System.currentTimeMillis())
+    return sdf.format(date)
+}

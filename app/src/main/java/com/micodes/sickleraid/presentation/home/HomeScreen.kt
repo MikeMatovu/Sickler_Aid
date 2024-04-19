@@ -62,6 +62,7 @@ fun HomeScreen(
 
     val context = LocalContext.current
     val state by homeViewModel.state.collectAsState()
+    val predictionState = homeViewModel.predictionState.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val authState = DataProvider.authState
@@ -224,14 +225,42 @@ fun HomeScreen(
                     Text(text = "Simple Notification")
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Button(onClick = { }) {
-                    Text(text = "Generate PDF")
+                Button(
+                    onClick = {
+                        homeViewModel.getPrediction(
+                            sn = 3,
+                            gender = 1,
+                            patientAge = 40,
+                            diagnosisAge = 3,
+                            bmi = 18,
+                            pcv = 71,
+                            crisisFrequency = 6,
+                            transfusionFrequency = 1,
+                            spo2 = 23,
+                            systolicBP = 168,
+                            diastolicBP = 100,
+                            heartRate = 185,
+                            respiratoryRate = 12,
+                            hbF = 12,
+                            temp = 38,
+                            mcv = 135,
+                            platelets = 239317,
+                            alt = 51,
+                            bilirubin = 1,
+                            ldh = 335,
+                            percentageAverage = 60
+                        )
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Get Prediction")
+                }
+                predictionState.value?.let { predictionResponse ->
+                    // Handle prediction response here
+                    Text("This is the prediction: $predictionResponse")
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(onClick = { mainViewModel.cancelSimpleNotification(context = context) }) {
-                    Text(text = "Cancel Notification")
-                }
+
 
                 //End dummy content
             }
