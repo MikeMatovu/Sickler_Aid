@@ -12,5 +12,6 @@ data class HealthInsightsState(
     val pdfUri: Uri? = null,
     val isLoading: Boolean = true,
     val isEmpty: Boolean = false,
-    val error: Throwable? = null
+    val error: Throwable? = null,
+    val prediction: Float = 0.0f
 )
