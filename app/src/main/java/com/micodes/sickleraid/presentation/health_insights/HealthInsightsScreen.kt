@@ -134,7 +134,7 @@ fun HealthInsightsScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Weekly insights graph",
+                text = "Weekly temperature graph",
                 modifier = Modifier
                     .padding(8.dp),
                 style = MaterialTheme.typography.headlineMedium

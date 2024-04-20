@@ -62,7 +62,8 @@ fun HomeScreen(
 
     val context = LocalContext.current
     val state by homeViewModel.state.collectAsState()
-    val predictionState = homeViewModel.predictionState.collectAsState()
+    val latestDailyCheckup = state.latestRecords?.latestDailyCheckup
+    val latestMedicalRecords = state.latestRecords?.latestMedicalRecord
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val authState = DataProvider.authState
@@ -145,23 +146,7 @@ fun HomeScreen(
 
                 SectionTitle("Medication List")
 
-                val dummyResources2 = listOf(
-                    SupportResource(
-                        title = "Resource 1",
-                        url = "",
-                        imageResourceId = R.drawable.resource_img_6
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        url = "",
-                        imageResourceId = R.drawable.cells
-                    ),
-                    SupportResource(
-                        title = "Resource 1",
-                        url = "",
-                        imageResourceId = R.drawable.cells
-                    ),
-                )
+
                 if (state.isLoading) {
                     ProgressIndicatorComposable()
                 } else {
@@ -208,22 +193,12 @@ fun HomeScreen(
                         modifier = Modifier.padding(6.dp),
                     )
                 }
-//                Button(onClick = {
-//                    homeViewModel.getLatestPatientRecords()
-//                }) {
-//                    Text(text = "LATEST RECORDS")
-//                }
-//                Text(text = "Latest Daily Checkup: ${state.latestRecords}")
-
                 Button(onClick = {
-                    mainViewModel.showSimpleNotification(
-                        context = context,
-                        title = "Hello user",
-                        message = "Wafiquan"
-                    )
+                    homeViewModel.getLatestPatientRecords()
                 }) {
-                    Text(text = "Simple Notification")
+                    Text(text = "LATEST RECORDS")
                 }
+
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
@@ -255,11 +230,47 @@ fun HomeScreen(
                 ) {
                     Text(text = "Get Prediction")
                 }
-                predictionState.value?.let { predictionResponse ->
-                    // Handle prediction response here
-                    Text("This is the prediction: $predictionResponse")
-                }
 
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = {
+                        if (latestMedicalRecords != null && latestDailyCheckup != null) {
+                            homeViewModel.getPrediction(
+                                sn = latestMedicalRecords.bmi,
+                                gender = latestMedicalRecords.aat,
+                                patientAge = 40,
+                                diagnosisAge = 3,
+                                bmi = latestMedicalRecords.bmi,
+                                pcv = latestMedicalRecords.packetCellVolume,
+                                crisisFrequency = 6,
+                                transfusionFrequency = latestMedicalRecords.ldh,
+                                spo2 = latestDailyCheckup.pulseRate,
+                                systolicBP = latestDailyCheckup.systolicBP,
+                                diastolicBP = latestDailyCheckup.diastolicBP,
+                                heartRate = latestDailyCheckup.respiratoryRate,
+                                respiratoryRate = latestDailyCheckup.respiratoryRate,
+                                hbF = latestMedicalRecords.fetalHaemoglobin,
+                                temp = latestDailyCheckup.temperature,
+                                mcv = latestMedicalRecords.meanCorpuscularVolume,
+                                platelets = latestMedicalRecords.platelets,
+                                alt = latestMedicalRecords.aat,
+                                bilirubin = latestMedicalRecords.birulubin,
+                                ldh = latestMedicalRecords.ldh,
+                                percentageAverage = 60
+                            )
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Get Prediction")
+                }
+//                if (predictionState.value == null) {
+//                    ProgressIndicatorComposable()
+//                }
+                state.predictionState?.let { predictionResponse ->
+                    // Handle prediction response here
+                    Text("This is the prediction: ${predictionResponse.prediction}")
+                }
 
 
                 //End dummy content

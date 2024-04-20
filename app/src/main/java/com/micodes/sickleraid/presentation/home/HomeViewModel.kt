@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.dto.PredictionResponse
+import com.micodes.sickleraid.domain.repository.MedicineRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
+import com.micodes.sickleraid.presentation.medicine.Medicine
 import com.micodes.sickleraid.util.RESOURCES_URL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,13 +25,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: SicklerAidRepository,
+    private val medicineRepository: MedicineRepository,
     private val auth: FirebaseAuth,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
-
-    private val _predictionState = MutableStateFlow<PredictionResponse?>(null)
-    val predictionState: StateFlow<PredictionResponse?> = _predictionState
 
     fun getPrediction(
         sn: Int,
@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
                 spo2, systolicBP, diastolicBP, heartRate, respiratoryRate, hbF, temp, mcv, platelets, alt,
                 bilirubin, ldh, percentageAverage
             )
-            _predictionState.value = prediction
+            _state.value.predictionState = prediction
         }
     }
 
@@ -79,16 +79,36 @@ class HomeViewModel @Inject constructor(
     init {
         getLatestPatientRecords()
         getEducationalMaterials()
+        getMedicineList()
     }
 
     //Functions
-    fun getLatestPatientRecords() {
+     fun getLatestPatientRecords() {
         viewModelScope.launch {
             val currentUser: FirebaseUser? = auth.currentUser
             currentUser?.let { firebaseUser ->
                 val userId = firebaseUser.uid
                 val latestRecord = repository.getLatestPatientRecords(userId)
-                _state.update { it.copy(latestRecords = latestRecord.toString()) }
+                _state.update { it.copy(latestRecords = latestRecord) }
+            }
+        }
+    }
+
+    private fun getMedicineList() {
+        viewModelScope.launch {
+            val currentUser: FirebaseUser? = auth.currentUser
+            currentUser?.let { firebaseUser ->
+                val userId = firebaseUser.uid
+                val medicineList = medicineRepository.getMedicines(userId)
+                _state.value = state.value.copy(
+                    medicineList = medicineList.map {
+                        MedicineItem(
+                            name = it.name,
+                            quantity = it.id,
+                        )
+                    },
+//                    isLoading = false
+                )
             }
         }
     }

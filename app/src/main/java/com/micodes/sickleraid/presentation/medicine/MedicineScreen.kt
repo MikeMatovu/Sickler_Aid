@@ -89,7 +89,7 @@ fun MedicineScreenContent(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBarComposable(
-                title = "MedicineTable Tracker",
+                title = "Medicine Tracker",
                 scrollBehavior = scrollBehavior,
                 profileImage = Icons.Default.Person,
                 buttonText = "Save",

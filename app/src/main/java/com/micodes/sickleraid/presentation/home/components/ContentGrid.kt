@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.micodes.sickleraid.R
-import com.micodes.sickleraid.presentation.home.MedicineResource
+import com.micodes.sickleraid.presentation.home.MedicineItem
 import com.micodes.sickleraid.presentation.home.SupportResource
 
 
@@ -29,7 +29,7 @@ fun ResourcesRow(resources: List<SupportResource>, onResourceClick: (String) -> 
 }
 
 @Composable
-fun MedicineRow(medicines: List<MedicineResource>, onMedicineClick: (String) -> Unit) {
+fun MedicineRow(medicines: List<MedicineItem>, onMedicineClick: (String) -> Unit) {
 
     LazyRow(
         modifier = Modifier

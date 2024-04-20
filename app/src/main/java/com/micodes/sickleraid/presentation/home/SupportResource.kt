@@ -1,7 +1,6 @@
 package com.micodes.sickleraid.presentation.home
 
 import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.painter.Painter
 
 data class SupportResource(
     val title: String,
@@ -9,7 +8,7 @@ data class SupportResource(
     val url: String
 )
 
-data class MedicineResource(
+data class MedicineItem(
     val name: String,
     val quantity: Int
 )

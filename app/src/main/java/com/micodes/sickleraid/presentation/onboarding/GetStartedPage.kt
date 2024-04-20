@@ -63,7 +63,7 @@ fun GetStarted(
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "Lorem ipsum hdsfuhe vwegewe egergffqfe dwesfwef",
+                text = "Your Health Matters",
                 modifier = Modifier.padding(30.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground

@@ -1,9 +1,12 @@
 package com.micodes.sickleraid.presentation.home
 
 import com.micodes.sickleraid.R
+import com.micodes.sickleraid.data.remote.dto.PredictionResponse
+import com.micodes.sickleraid.domain.model.LatestPatientRecords
 
 data class HomeState(
-    var latestRecords: String = "",
+    var predictionState: PredictionResponse? = null,
+    var latestRecords: LatestPatientRecords? = null,
     var educationalMaterials: List<Pair<String, String>> = emptyList(),
     var supportResources: List<SupportResource> = listOf(
         SupportResource(
@@ -38,28 +41,6 @@ data class HomeState(
         ),
 
         ),
-    var medicineList: List<MedicineResource> = listOf<MedicineResource>(
-        MedicineResource(
-            name = "Hydroxurea",
-            quantity = 0
-        ),
-        MedicineResource(
-            name = "Hydroxurea",
-            quantity = 0
-        ),
-        MedicineResource(
-            name = "Hydroxurea",
-            quantity = 0
-        ),
-        MedicineResource(
-            name = "Hydroxurea",
-            quantity = 0
-        ),
-        MedicineResource(
-            name = "Hydroxurea",
-            quantity = 0
-        ),
-
-        ),
+    var medicineList: List<MedicineItem> = emptyList(),
     var isLoading: Boolean = false
 )
