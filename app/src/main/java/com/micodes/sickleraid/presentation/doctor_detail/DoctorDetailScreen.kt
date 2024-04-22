@@ -2,17 +2,12 @@ package com.micodes.sickleraid.presentation.doctor_detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrokenImage
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,13 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.presentation.common.composable.ProfileAvatar
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
-import com.micodes.sickleraid.presentation.doctor_detail.components.ActionButton
 import com.micodes.sickleraid.presentation.doctor_detail.components.BoldHeading
 import com.micodes.sickleraid.presentation.doctor_detail.components.ButtonRow
+import com.micodes.sickleraid.presentation.doctor_detail.components.EmergencyActionButton
 import com.micodes.sickleraid.presentation.doctor_detail.components.OverViewSection
 
 @Composable
@@ -59,7 +53,7 @@ fun DoctorDetailContent(
     state: DoctorDetailsState,
     viewModel: DoctorDetailViewModel
 ) {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -78,7 +72,7 @@ fun DoctorDetailContent(
                 }
             )
         }
-    ) {paddingValues ->
+    ) { paddingValues ->
         Column(
 
             modifier = Modifier
@@ -92,17 +86,24 @@ fun DoctorDetailContent(
                 size = 128
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BoldHeading()
+            BoldHeading(
+                name = state.name
+            )
             Spacer(modifier = Modifier.height(16.dp))
 
-            ButtonRow()
+            ButtonRow(
+                onAppointmentClick = { /*TODO*/ },
+                onSendReportClick = { /*TODO*/ },
+            )
             Spacer(modifier = Modifier.height(64.dp))
 
-            OverViewSection()
+            OverViewSection(
+                overview = state.overview
+            )
 
             Spacer(modifier = Modifier.weight(1f))
-            ActionButton(
-                onClick = {
+            EmergencyActionButton(
+                onEmergencyClick = {
                     viewModel.insertDoctor()
                 }
             )

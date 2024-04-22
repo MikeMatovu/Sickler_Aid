@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ActionButton(onClick: () -> Unit) {
+fun EmergencyActionButton(
+    onEmergencyClick: () -> Unit
+) {
     FilledTonalButton(
-        onClick = onClick,
+        onClick = onEmergencyClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
@@ -21,6 +23,6 @@ fun ActionButton(onClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         )
     ) {
-        Text("Lorem ipsum")
+        Text("Emergency Call!")
     }
 }

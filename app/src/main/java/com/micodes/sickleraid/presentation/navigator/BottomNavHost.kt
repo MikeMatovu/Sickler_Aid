@@ -1,6 +1,8 @@
 package com.micodes.sickleraid.presentation.navigator
 
 import HealthInsightsScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +19,7 @@ import com.micodes.sickleraid.presentation.navgraph.Screen
 import com.micodes.sickleraid.presentation.profile.ProfileScreen
 import com.micodes.sickleraid.presentation.symptoms.SymptomsScreen
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun BottomNavHost(
     mainNavController: NavHostController,
@@ -39,7 +42,7 @@ fun BottomNavHost(
             ProfileScreen(navController = navController, mainNavController = mainNavController)
         }
         composable(route = Screen.Insights.route) {
-            HealthInsightsScreen()
+            HealthInsightsScreen(navController = navController)
         }
         composable(route = Screen.Medicine.route) {
             MedicineScreen(navController = navController)

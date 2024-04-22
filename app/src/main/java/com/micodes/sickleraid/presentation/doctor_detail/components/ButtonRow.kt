@@ -18,14 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ButtonRow() {
+fun ButtonRow(
+    onAppointmentClick: () -> Unit,
+    onSendReportClick: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
 
         FilledTonalButton(
-            onClick = { },
+            onClick = onAppointmentClick,
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
             )
@@ -41,12 +44,12 @@ fun ButtonRow() {
 
         Spacer(modifier = Modifier.width(16.dp))
         FilledTonalButton(
-            onClick = { },
+            onClick = onSendReportClick,
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
             )
         ) {
-            Text("Lorem ipsum")
+            Text("Send Report")
         }
 
     }

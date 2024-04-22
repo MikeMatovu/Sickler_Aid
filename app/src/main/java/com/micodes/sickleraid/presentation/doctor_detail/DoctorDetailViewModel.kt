@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDao
 import com.micodes.sickleraid.domain.model.Doctor
+import com.micodes.sickleraid.domain.repository.DoctorRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import com.micodes.sickleraid.domain.services.AccountService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DoctorDetailViewModel @Inject constructor(
     private val accountService: AccountService,
-    private val sicklerAidRepository: SicklerAidRepository
+    private val doctorRepository: DoctorRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(DoctorDetailsState())
@@ -38,14 +39,14 @@ class DoctorDetailViewModel @Inject constructor(
     fun insertDoctor() {
         viewModelScope.launch {
             val doctor = Doctor(0, "John", "Doe", "john.doe@example.com", "1234567890")
-            sicklerAidRepository.upsertDoctor(doctor)
+            doctorRepository.upsertDoctor(doctor)
             Log.d("DoctorDetailViewModel", "Doctor inserted successfully")
         }
     }
 
     private fun fetchDoctors() {
         viewModelScope.launch {
-            val doctors = sicklerAidRepository.getAllDoctors()
+            val doctors = doctorRepository.getAllDoctors()
             Log.d("DoctorDetailViewModel", "Doctors: $doctors")
 
         }

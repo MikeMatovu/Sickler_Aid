@@ -8,6 +8,7 @@ import com.micodes.sickleraid.domain.model.MedicalRecords
 import com.micodes.sickleraid.domain.model.MedicineTable
 import com.micodes.sickleraid.domain.model.PatientTable
 import com.micodes.sickleraid.domain.model.UserDetails
+import com.micodes.sickleraid.domain.model.UserDoctorCrossRef
 
 /**
  * Database class with a singleton Instance object.
@@ -19,9 +20,10 @@ import com.micodes.sickleraid.domain.model.UserDetails
         UserDetails::class,
         MedicalRecords::class,
         DailyCheckup::class,
-        MedicineTable::class
+        MedicineTable::class,
+        UserDoctorCrossRef::class,
     ],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 abstract class SicklerAidDatabase : RoomDatabase() {
@@ -31,5 +33,7 @@ abstract class SicklerAidDatabase : RoomDatabase() {
     abstract val medicalRecordsDao: MedicalRecordsDao
     abstract val dailyCheckupDao: DailyCheckupDao
     abstract val medicineDao: MedicineDao
+    abstract val doctorDao: DoctorDao
+    abstract val userDoctorCrossRefDao: UserDoctorCrossRefDao
 
 }

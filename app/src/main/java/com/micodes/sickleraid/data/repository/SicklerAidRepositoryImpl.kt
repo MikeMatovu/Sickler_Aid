@@ -21,14 +21,6 @@ open class SicklerAidRepositoryImpl @Inject constructor(
     private val medicalRecordsDao: MedicalRecordsDao,
     private val predictionRemoteDataSource: PredictionRemoteDataSource
 ) : SicklerAidRepository {
-    override suspend fun getAllDoctors(): LiveData<List<Doctor>> {
-        return dao.getAllDoctors()
-    }
-
-    override suspend fun upsertDoctor(doctor: Doctor) {
-        dao.upsert(doctor)
-    }
-
     override suspend fun getPrediction(
         sn: Int,
         gender: Int,

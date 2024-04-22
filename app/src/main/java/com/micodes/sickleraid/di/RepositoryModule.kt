@@ -3,11 +3,13 @@ package com.micodes.sickleraid.di
 import com.micodes.sickleraid.data.remote.PredictionRemoteDataSource
 import com.micodes.sickleraid.data.remote.RetrofitPredictionRemoteDataSource
 import com.micodes.sickleraid.data.repository.DailyCheckupRepositoryImpl
+import com.micodes.sickleraid.data.repository.DoctorRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicalRecordsRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicineRepositoryImpl
 import com.micodes.sickleraid.data.repository.SicklerAidRepositoryImpl
 import com.micodes.sickleraid.data.repository.UserRepositoryImpl
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
+import com.micodes.sickleraid.domain.repository.DoctorRepository
 import com.micodes.sickleraid.domain.repository.MedicalRecordsRepository
 import com.micodes.sickleraid.domain.repository.MedicineRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
@@ -44,7 +46,11 @@ abstract class RepositoryModule {
     abstract fun bindMedicineRepository(medicineRepositoryImpl: MedicineRepositoryImpl): MedicineRepository
 
 
-    //TODO remove this below
+    @Binds
+    @Singleton
+    abstract fun bindDoctorRepository(doctorRepositoryImpl: DoctorRepositoryImpl): DoctorRepository
+
+
     @Binds
     @Singleton
     abstract fun bindPredictionRemoteDataSource(dataSource: RetrofitPredictionRemoteDataSource): PredictionRemoteDataSource

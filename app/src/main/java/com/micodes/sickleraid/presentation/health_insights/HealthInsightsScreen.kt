@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
@@ -45,13 +46,14 @@ import com.micodes.sickleraid.presentation.health_insights.components.DropDownMe
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 import com.micodes.sickleraid.presentation.health_insights.components.PrintReportBtn
 import com.micodes.sickleraid.presentation.main_activity.MainViewModel
+import com.micodes.sickleraid.presentation.navgraph.Screen
 import java.io.InputStream
 import java.io.OutputStream
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Preview(showBackground = true)
 @Composable
 fun HealthInsightsScreen(
+    navController: NavController,
     viewModel: HealthInsightsViewModel = hiltViewModel(),
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
@@ -241,6 +243,12 @@ fun HealthInsightsScreen(
                         }
                     }
                 }
+            }
+
+            Button(onClick = {
+                navController.navigate(Screen.Doctor.route)
+            }) {
+                Text("My Doctor")
             }
         }
     }

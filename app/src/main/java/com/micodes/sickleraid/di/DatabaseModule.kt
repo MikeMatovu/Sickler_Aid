@@ -3,11 +3,14 @@ package com.micodes.sickleraid.di
 import android.app.Application
 import androidx.room.Room
 import com.micodes.sickleraid.data.datasource.database.DailyCheckupDao
+import com.micodes.sickleraid.data.datasource.database.DoctorDao
 import com.micodes.sickleraid.data.datasource.database.MedicalRecordsDao
 import com.micodes.sickleraid.data.datasource.database.MedicineDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDao
 import com.micodes.sickleraid.data.datasource.database.SicklerAidDatabase
 import com.micodes.sickleraid.data.datasource.database.UserDao
+import com.micodes.sickleraid.data.datasource.database.UserDoctorCrossRefDao
+import com.micodes.sickleraid.domain.model.UserDoctorCrossRef
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,4 +62,15 @@ object DatabaseModule {
     fun provideMedicine(
         sicklerAidDatabase: SicklerAidDatabase
     ): MedicineDao = sicklerAidDatabase.medicineDao
+
+    @Provides
+    @Singleton
+    fun provideDoctor(
+        sicklerAidDatabase: SicklerAidDatabase
+    ): DoctorDao = sicklerAidDatabase.doctorDao
+    @Provides
+    @Singleton
+    fun provideUserDoctorCrossRef(
+        sicklerAidDatabase: SicklerAidDatabase
+    ): UserDoctorCrossRefDao = sicklerAidDatabase.userDoctorCrossRefDao
 }

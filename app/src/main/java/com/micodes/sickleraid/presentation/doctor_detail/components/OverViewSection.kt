@@ -11,7 +11,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun OverViewSection() {
+fun OverViewSection(
+    overview: String
+) {
     Column {
         Text(
             text = "Overview",
@@ -21,7 +23,7 @@ fun OverViewSection() {
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            "This is the overview section of the doctor's profile. It contains a brief summary of the doctor's profile.",
+            text = overview,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(horizontal = 16.dp)
         )

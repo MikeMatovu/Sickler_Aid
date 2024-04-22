@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
-fun BoldHeading() {
+fun BoldHeading(
+    name: String
+) {
     Text(
-        text = "Dr. Kizza Joseph",
+        text = name,
         fontWeight = FontWeight.Bold,
         style = MaterialTheme.typography.headlineMedium
     )
