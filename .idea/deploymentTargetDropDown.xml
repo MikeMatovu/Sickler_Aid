@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="DoctorListItemPreview">
+        <State />
+      </entry>
       <entry key="HealthInsightsScreen">
         <State />
       </entry>
