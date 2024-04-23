@@ -64,6 +64,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.1")
     implementation("androidx.activity:activity-ktx:1.9.0")
 
+    //Accompanist permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.20.2")
+
 
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
