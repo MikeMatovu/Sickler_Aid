@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.micodes.sickleraid.presentation.daily_checkup.DailyCheckupScreen
 import com.micodes.sickleraid.presentation.doctor_detail.DoctorDetailsScreen
+import com.micodes.sickleraid.presentation.doctor_detail.DoctorListScreen
 import com.micodes.sickleraid.presentation.home.HomeScreen
 import com.micodes.sickleraid.presentation.medical_records.MedicalRecordsScreen
 import com.micodes.sickleraid.presentation.medicine.MedicineScreen
@@ -48,7 +49,8 @@ fun BottomNavHost(
             MedicineScreen(navController = navController)
         }
         composable(route = Screen.News.route) {
-            DoctorDetailsScreen(navController = navController)
+            //TODO: Replace with actual implementation
+            MedicineScreen(navController = navController)
         }
         composable(route = Screen.DailyCheckup.route) {
             DailyCheckupScreen(navController = navController)
@@ -57,5 +59,13 @@ fun BottomNavHost(
             MedicalRecordsScreen(navController = navController)
         }
 
+        composable(route = Screen.DoctorList.route) {
+            DoctorListScreen(navController = navController)
+        }
+        composable(route = "${Screen.Doctor.route}/{doctorId}") { backStackEntry ->
+            val arguments = backStackEntry.arguments
+            val doctorId = arguments?.getString("doctorId")
+            DoctorDetailsScreen(doctorId = doctorId, navController = navController)
+        }
     }
 }

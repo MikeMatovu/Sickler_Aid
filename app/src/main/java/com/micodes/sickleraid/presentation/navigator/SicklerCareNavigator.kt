@@ -1,5 +1,7 @@
 package com.micodes.sickleraid.presentation.navigator
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,6 +21,7 @@ import com.micodes.sickleraid.presentation.navigator.components.BottomNavigation
 import com.micodes.sickleraid.presentation.navigator.components.SicklerCareBottomNavigation
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SicklerCareNavigator(mainNavController: NavHostController) {

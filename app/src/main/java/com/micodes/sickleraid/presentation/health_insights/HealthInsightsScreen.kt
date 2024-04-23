@@ -246,7 +246,7 @@ fun HealthInsightsScreen(
             }
 
             Button(onClick = {
-                navController.navigate(Screen.Doctor.route)
+                navController.navigate(Screen.DoctorList.route)
             }) {
                 Text("My Doctor")
             }

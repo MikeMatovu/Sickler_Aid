@@ -9,17 +9,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.micodes.sickleraid.domain.model.Doctor
-import com.micodes.sickleraid.domain.model.UserDetails
 import com.micodes.sickleraid.domain.model.UserDoctorCrossRef
 
 @Dao
 interface DoctorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertDoctor(doctor: Doctor)
+    suspend fun upsertDoctor(doctor: Doctor): Long
 
     @Query("SELECT * FROM Doctor WHERE id = :doctorId")
-    fun getDoctor(doctorId: Int): LiveData<Doctor>
+    suspend fun getDoctor(doctorId: Int): Doctor
 
     @Query("SELECT * FROM Doctor")
     fun getAllDoctors(): LiveData<List<Doctor>>
@@ -34,10 +33,10 @@ interface UserDoctorCrossRefDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUserDoctorCrossRef(userDoctorCrossRef: UserDoctorCrossRef)
-//
-//    @Transaction
-//    @Query("SELECT Doctor.*, UserDoctorCrossRef.userId FROM Doctor INNER JOIN UserDoctorCrossRef ON Doctor.id = UserDoctorCrossRef.doctorId WHERE UserDoctorCrossRef.userId = :userId")
-//    fun getDoctorsForUser(userId: String): LiveData<List<DoctorWithUserId>>
+
+    @Transaction
+    @Query("SELECT Doctor.*, UserDoctorCrossRef.userId FROM Doctor INNER JOIN UserDoctorCrossRef ON Doctor.id = UserDoctorCrossRef.doctorId WHERE UserDoctorCrossRef.userId = :userId")
+    fun getDoctorsForUser(userId: String): List<Doctor>
 //
 //    @Query("SELECT * FROM UserDoctorCrossRef WHERE doctorId = :doctorId")
 //    fun getUsersForDoctor(doctorId: Int): LiveData<List<UserDetails>>

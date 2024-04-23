@@ -17,6 +17,8 @@ sealed class Screen(val route:String){
     object Profile:Screen("profile")
 
     object Doctor:Screen("doctor")
+
+    object DoctorList:Screen("doctor_list")
     object DailyCheckup:Screen("dailycheckup")
     object MedicalRecords:Screen("medicalrecords")
 

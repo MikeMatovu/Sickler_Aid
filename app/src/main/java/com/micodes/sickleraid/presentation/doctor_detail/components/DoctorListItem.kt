@@ -26,12 +26,11 @@ import com.micodes.sickleraid.domain.model.Doctor
 @Composable
 fun DoctorListItem(
     doctor: Doctor,
-    onItemClick: () -> Unit
+    onDoctorDetailsClick: () -> Unit
 ) {
 
 
     Card {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,10 +55,9 @@ fun DoctorListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f)
             )
-
             // Button
             Button(
-                onClick = onItemClick,
+                onClick = onDoctorDetailsClick,
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(text = "Details")
@@ -69,7 +67,7 @@ fun DoctorListItem(
 }
 
 @Composable
-@Preview(showSystemUi = true)
+@Preview(showBackground = true)
 fun DoctorListItemPreview() {
     DoctorListItem(
         doctor = Doctor(
@@ -79,6 +77,7 @@ fun DoctorListItemPreview() {
             email = "",
             phoneNumber = ""
         ),
-        onItemClick = {}
+        onDoctorDetailsClick = {}
     )
 }
+
