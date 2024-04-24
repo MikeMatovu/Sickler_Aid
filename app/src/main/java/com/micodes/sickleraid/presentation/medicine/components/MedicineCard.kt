@@ -27,6 +27,7 @@ import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import com.micodes.sickleraid.presentation.common.composable.BasicButton
 import com.micodes.sickleraid.presentation.common.composable.BasicTextButton
+import com.micodes.sickleraid.presentation.medicine.Medicine
 import java.time.LocalTime
 
 
@@ -34,40 +35,32 @@ import java.time.LocalTime
 @Composable
 fun MedicineCard(
     modifier: Modifier = Modifier,
-    name: String,
-    dosage: String,
-    frequency: String,
-    isEditMode: Boolean,
+    medicine: Medicine,
     onEditClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     onCancelClicked: () -> Unit,
     onNameChanged: (String) -> Unit,
     onDosageChanged: (String) -> Unit,
     onFrequencyChanged: (String) -> Unit,
-    onReminderSet: () -> Unit,
+    onReminderSet: (LocalTime) -> Unit,
+    onOpenReminder: () -> Unit,
+    onCloseTimeDialog: () -> Unit,
     onMarkAsTaken: () -> Unit
 ) {
 
-    var isTimeDialogShown: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val (selectedTime, setSelectedTime) = rememberSaveable {
-        mutableStateOf(LocalTime.now().noSeconds())
-    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.elevatedCardElevation(8.dp)
     ) {
-        if (isTimeDialogShown) {
+        if (medicine.isTimeDialogShown) {
             TimePickerDialog(
-                onDismissRequest = {  },
-                initialTime = selectedTime,
-                onTimeChange = {
-                    setSelectedTime(it)
-                    isTimeDialogShown = false
+                onDismissRequest = onCloseTimeDialog,
+                initialTime = medicine.selectedTime,
+                onTimeChange = {time ->
+                   onReminderSet(time)
                 },
                 title = { Text(text = "Select time") },
-                buttonColors = ButtonDefaults.textButtonColors(contentColor = Color.Red),
             )
         }
         Column(
@@ -75,26 +68,26 @@ fun MedicineCard(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = name, style = MaterialTheme.typography.titleSmall)
+            Text(text = medicine.medicineName, style = MaterialTheme.typography.titleSmall)
             Spacer(modifier = Modifier.height(4.dp))
 
-            if (isEditMode) {
+            if (medicine.isEditMode) {
                 EditModeContent(
-                    name = name,
-                    dosage = dosage,
-                    frequency = frequency,
+                    name = medicine.medicineName,
+                    dosage = medicine.dosage,
+                    frequency = medicine.frequency,
                     onNameChanged = onNameChanged,
                     onDosageChanged = onDosageChanged,
                     onFrequencyChanged = onFrequencyChanged
                 )
             } else {
                 Text(
-                    text = "Dosage: $dosage",
+                    text = "Dosage: ${medicine.dosage}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Frequency: $frequency",
+                    text = "Frequency: ${medicine.frequency}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -105,18 +98,16 @@ fun MedicineCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (!isEditMode) {
+                if (!medicine.isEditMode) {
                     BasicButton(
                         text = "Set Reminder",
                         modifier = Modifier,
-                        action = {
-                            isTimeDialogShown = true
-                        }
+                        action = onOpenReminder
                     )
                 }
 
                 Row(horizontalArrangement = Arrangement.End) {
-                    if (!isEditMode) {
+                    if (!medicine.isEditMode) {
                         BasicTextButton(
                             text = "Mark as Taken",
                             modifier = Modifier,

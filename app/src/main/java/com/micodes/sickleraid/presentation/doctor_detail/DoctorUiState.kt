@@ -11,6 +11,7 @@ data class DoctorUiState(
     val phoneNumberToDial: String = "",
     val shouldDialPhoneNumber: Boolean = false,
     val selectedFileUri: Uri? = null,
+    val isDateDialogShown: Boolean = false,
     val profilePictureLink: String = "",
     val isInsertDoctorDialogVisible: Boolean = false,
     val isLoading: Boolean = true,

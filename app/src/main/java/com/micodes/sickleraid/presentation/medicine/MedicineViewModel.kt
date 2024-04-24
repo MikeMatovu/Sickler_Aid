@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +38,57 @@ class MedicineViewModel @Inject constructor(
     fun onDialogDismiss() {
         _state.update { it.copy(openAlertDialog = false) }
         DataProvider.databaseOperationResponse = Response.Success(null)
+    }
+
+    fun onReminderSet(index: Int, time: LocalTime) {
+        _state.update {
+            it.copy(
+                medicineList = it.medicineList.mapIndexed { i, medicine ->
+                    if (i == index) {
+                        medicine.copy(
+                            isTimeDialogShown = false,
+                            selectedTime = time
+                        )
+                    } else {
+                        medicine
+                    }
+                }
+            )
+        }
+    }
+
+    fun onCloseReminder(index: Int) {
+        _state.update {
+            it.copy(
+                medicineList = it.medicineList.mapIndexed { i, medicine ->
+                    if (i == index) {
+                        medicine.copy(
+                            isTimeDialogShown = false
+                        )
+                    } else {
+                        medicine
+                    }
+                }
+            )
+        }
+    }
+
+
+    //TODO: REMOVE THIS FUNCTION
+    fun onOpenReminder(index: Int) {
+        _state.update {
+            it.copy(
+                medicineList = it.medicineList.mapIndexed { i, medicine ->
+                    if (i == index) {
+                        medicine.copy(
+                            isTimeDialogShown = true
+                        )
+                    } else {
+                        medicine
+                    }
+                }
+            )
+        }
     }
 
     fun onCancelClicked(index: Int) {

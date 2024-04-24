@@ -37,6 +37,7 @@ import com.micodes.sickleraid.presentation.common.composable.CenterAlignedTopApp
 import com.micodes.sickleraid.presentation.common.composable.DismissDialogComposable
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.medicine.components.MedicineCard
+import java.time.LocalTime
 
 @Composable
 fun MedicineScreen(
@@ -63,7 +64,10 @@ fun MedicineScreen(
         onCreateNewMedicine = viewModel::createNewMedicine,
         onEditClicked = viewModel::onEditClicked,
         onCancelClicked = viewModel::onCancelClicked,
-        onSavedClicked = viewModel::onSavedClicked
+        onSavedClicked = viewModel::onSavedClicked,
+        onReminderSet = viewModel::onReminderSet,
+        onOpenReminder = viewModel::onOpenReminder,
+        onCloseTimeDialog = viewModel::onCloseReminder
     )
 }
 
@@ -82,6 +86,9 @@ fun MedicineScreenContent(
     onEditClicked: (Int) -> Unit,
     onCancelClicked: (Int) -> Unit,
     onSavedClicked: (Int, Int) -> Unit,
+    onReminderSet: (Int, LocalTime) -> Unit,
+    onOpenReminder: (Int) -> Unit,
+    onCloseTimeDialog: (Int) -> Unit
 ) {
 
 
@@ -139,17 +146,16 @@ fun MedicineScreenContent(
                             val medicine = uiState.medicineList[index]
                             MedicineCard(
                                 modifier = Modifier.padding(8.dp),
-                                name = medicine.medicineName,
-                                dosage = medicine.dosage,
-                                frequency = medicine.frequency,
-                                isEditMode = medicine.isEditMode,
+                                medicine = medicine,
                                 onNameChanged = { onNameChanged(index, it) },
                                 onDosageChanged = { onDosageChanged(index, it) },
                                 onFrequencyChanged = { onFrequencyChanged(index, it) },
                                 onEditClicked = { onEditClicked(index) },
                                 onCancelClicked = { onCancelClicked(index) },
                                 onSaveClicked = { onSavedClicked(index, medicine.id) },
-                                onReminderSet = { /* handle reminder */ },
+                                onReminderSet = { time -> onReminderSet(index, time) },
+                                onOpenReminder = {onOpenReminder(index)},
+                                onCloseTimeDialog = {onCloseTimeDialog(index)},
                                 onMarkAsTaken = { /* handle mark as taken */ }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
