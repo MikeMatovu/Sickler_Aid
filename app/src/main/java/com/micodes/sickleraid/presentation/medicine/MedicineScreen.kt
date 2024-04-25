@@ -47,6 +47,9 @@ fun MedicineScreen(
     val uiState by viewModel.state.collectAsState()
     val scrollState = rememberLazyListState()
 
+    LaunchedEffect(viewModel.medicineListSize) {
+        viewModel.refresh()
+    }
     LaunchedEffect(viewModel.scrollToNewItem) {
         // Scroll to the bottom when a new item is added
         scrollState.scrollToItem(uiState.medicineList.size)

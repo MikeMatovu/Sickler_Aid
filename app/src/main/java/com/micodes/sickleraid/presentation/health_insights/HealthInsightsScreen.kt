@@ -20,6 +20,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -67,12 +68,8 @@ fun HealthInsightsScreen(
                     Text(text = "Health Insights", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 actions = listOf {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_app),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
+                    TextButton(onClick = { navController.navigate(Screen.DoctorList.route)}) {
+                        Text(text = "My doctor")
                     }
                 }
             )
@@ -243,12 +240,6 @@ fun HealthInsightsScreen(
                         }
                     }
                 }
-            }
-
-            Button(onClick = {
-                navController.navigate(Screen.DoctorList.route)
-            }) {
-                Text("My Doctor")
             }
         }
     }

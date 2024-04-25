@@ -34,6 +34,6 @@ fun PrintReportBtn(onUriReceived: (Uri) -> Unit) {
         }
         mediaStorePermissionLauncher.launch(createDocumentIntent)
     }) {
-        Text("Generate pdf")
+        Text("Generate Report")
     }
 }
