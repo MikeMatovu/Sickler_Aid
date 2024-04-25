@@ -1,6 +1,7 @@
 package com.micodes.sickleraid.data.repository
 
 import androidx.lifecycle.LiveData
+import com.google.firebase.firestore.FirebaseFirestore
 import com.micodes.sickleraid.data.datasource.database.DoctorDao
 import com.micodes.sickleraid.data.datasource.database.UserDoctorCrossRefDao
 import com.micodes.sickleraid.domain.model.Doctor
@@ -11,6 +12,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DoctorRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore,
     private val dao: DoctorDao,
     private val userDoctorCrossRefDao: UserDoctorCrossRefDao
 ) : DoctorRepository {
@@ -20,6 +22,15 @@ class DoctorRepositoryImpl @Inject constructor(
 
     override suspend fun upsertUserAndDoctorCrossRef(userDoctorCrossRef: UserDoctorCrossRef) {
         userDoctorCrossRefDao.insertUserDoctorCrossRef(userDoctorCrossRef)
+    }
+
+    override suspend fun assignUserToDoctor(userId: String, doctorId: String) {
+        val userDoctorData = hashMapOf(
+            "userId" to userId,
+            "doctorId" to doctorId
+        )
+
+        firestore.collection("user_doctor").add(userDoctorData)
     }
 
     override suspend fun getDoctor(doctorId: Int): Doctor {

@@ -77,7 +77,7 @@ dependencies {
     implementation("com.google.firebase:firebase-perf")
     implementation("com.google.firebase:firebase-config")
     implementation("com.google.firebase:firebase-messaging")
-
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -89,6 +89,7 @@ dependencies {
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.51")
+
     ksp("com.google.dagger:hilt-compiler:2.51")
     ksp("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")

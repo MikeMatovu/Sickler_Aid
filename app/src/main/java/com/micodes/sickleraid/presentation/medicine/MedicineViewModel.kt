@@ -30,9 +30,11 @@ class MedicineViewModel @Inject constructor(
     private val _scrollToNewItem = MutableSharedFlow<Unit>()
     val scrollToNewItem: Flow<Unit> = _scrollToNewItem.asSharedFlow()
 
+    val medicineListSize = state.value.medicineList.size
     init {
         getMedicineList()
     }
+
 
     fun openDialog() = _state.update { it.copy(openAlertDialog = true) }
     fun onDialogDismiss() {

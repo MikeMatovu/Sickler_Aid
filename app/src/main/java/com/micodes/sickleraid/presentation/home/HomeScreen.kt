@@ -31,13 +31,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.micodes.sickleraid.R
-import com.micodes.sickleraid.data.remote.AuthState
 import com.micodes.sickleraid.data.remote.DataProvider
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
@@ -121,7 +119,37 @@ fun HomeScreen(
                 .padding(paddingValues)
         ) {
             item {
-                SectionTitle("Medical Information")
+                SectionTitle(
+                    sectionTitle = "Medical Information",
+                    buttonTitle = "Get Latest"
+                ) {
+                    homeViewModel.getLatestPatientRecords()
+                    if (latestMedicalRecords != null && latestDailyCheckup != null) {
+                        homeViewModel.getPrediction(
+                            sn = latestMedicalRecords.bmi,
+                            gender = latestMedicalRecords.aat,
+                            patientAge = 40,
+                            diagnosisAge = 3,
+                            bmi = latestMedicalRecords.bmi,
+                            pcv = latestMedicalRecords.packetCellVolume,
+                            crisisFrequency = 6,
+                            transfusionFrequency = latestMedicalRecords.ldh,
+                            spo2 = latestDailyCheckup.pulseRate,
+                            systolicBP = latestDailyCheckup.systolicBP,
+                            diastolicBP = latestDailyCheckup.diastolicBP,
+                            heartRate = latestDailyCheckup.respiratoryRate,
+                            respiratoryRate = latestDailyCheckup.respiratoryRate,
+                            hbF = latestMedicalRecords.fetalHaemoglobin,
+                            temp = latestDailyCheckup.temperature,
+                            mcv = latestMedicalRecords.meanCorpuscularVolume,
+                            platelets = latestMedicalRecords.platelets,
+                            alt = latestMedicalRecords.aat,
+                            bilirubin = latestMedicalRecords.birulubin,
+                            ldh = latestMedicalRecords.ldh,
+                            percentageAverage = 60
+                        )
+                    }
+                }
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
@@ -132,6 +160,9 @@ fun HomeScreen(
                         },
                         modifier = Modifier
                     )
+                    if(state.isPredicting) {
+                        ProgressIndicatorComposable()
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                     ContentRow(
                         title = "Daily Checkup",
@@ -144,7 +175,13 @@ fun HomeScreen(
             }
             item {
 
-                SectionTitle("Medication List")
+                SectionTitle(
+                    sectionTitle = "Medication List",
+                    buttonTitle = "View All"
+                ) {
+                    //TODO: FIX NAVIGATION BUG HERE
+                    navController.navigate(Screen.Medicine.route)
+                }
 
 
                 if (state.isLoading) {
@@ -156,7 +193,13 @@ fun HomeScreen(
 
             item {
 
-                SectionTitle("My support")
+                SectionTitle(
+                    sectionTitle = "My support",
+                    buttonTitle = "View All"
+                ) {
+                    TODO()
+                }
+
                 if (state.isLoading) {
                     ProgressIndicatorComposable()
                 } else {
@@ -171,65 +214,60 @@ fun HomeScreen(
 
             item {
                 //End dummy content
+//
+//                if (authState == AuthState.SignedIn) {
+//                    Text(
+//                        text = DataProvider.user?.displayName ?: "Name Placeholder",
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                    Text(DataProvider.user?.email ?: "Email Placeholder")
+//                } else {
+//                    Text(
+//                        "Sign-in to view data!"
+//                    )
+//                }
+//                Button(
+//                    onClick = {
+//
+//                    },
+//                ) {
+//                    Text(
+//                        text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
+//                        modifier = Modifier.padding(6.dp),
+//                    )
+//                }
 
-                if (authState == AuthState.SignedIn) {
-                    Text(
-                        text = DataProvider.user?.displayName ?: "Name Placeholder",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(DataProvider.user?.email ?: "Email Placeholder")
-                } else {
-                    Text(
-                        "Sign-in to view data!"
-                    )
-                }
-                Button(
-                    onClick = {
-
-                    },
-                ) {
-                    Text(
-                        text = if (authState != AuthState.SignedIn) "Sign-in" else "Sign out",
-                        modifier = Modifier.padding(6.dp),
-                    )
-                }
-                Button(onClick = {
-                    homeViewModel.getLatestPatientRecords()
-                }) {
-                    Text(text = "LATEST RECORDS")
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(
-                    onClick = {
-                        homeViewModel.getPrediction(
-                            sn = 3,
-                            gender = 1,
-                            patientAge = 40,
-                            diagnosisAge = 3,
-                            bmi = 18,
-                            pcv = 71,
-                            crisisFrequency = 6,
-                            transfusionFrequency = 1,
-                            spo2 = 23,
-                            systolicBP = 168,
-                            diastolicBP = 100,
-                            heartRate = 185,
-                            respiratoryRate = 12,
-                            hbF = 12,
-                            temp = 38,
-                            mcv = 135,
-                            platelets = 239317,
-                            alt = 51,
-                            bilirubin = 1,
-                            ldh = 335,
-                            percentageAverage = 60
-                        )
-                    },
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(text = "Get Prediction")
-                }
+//                Spacer(modifier = Modifier.height(12.dp))
+//                Button(
+//                    onClick = {
+//                        homeViewModel.getPrediction(
+//                            sn = 3,
+//                            gender = 1,
+//                            patientAge = 40,
+//                            diagnosisAge = 3,
+//                            bmi = 18,
+//                            pcv = 71,
+//                            crisisFrequency = 6,
+//                            transfusionFrequency = 1,
+//                            spo2 = 23,
+//                            systolicBP = 168,
+//                            diastolicBP = 100,
+//                            heartRate = 185,
+//                            respiratoryRate = 12,
+//                            hbF = 12,
+//                            temp = 38,
+//                            mcv = 135,
+//                            platelets = 239317,
+//                            alt = 51,
+//                            bilirubin = 1,
+//                            ldh = 335,
+//                            percentageAverage = 60
+//                        )
+//                    },
+//                    modifier = Modifier.padding(16.dp)
+//                ) {
+//                    Text(text = "Get Prediction")
+//                }
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(

@@ -14,4 +14,5 @@ interface DoctorRepository {
 
     suspend fun getDoctorsForUser(userId: String): List<Doctor>
 
+    suspend fun assignUserToDoctor(userId: String, doctorId: String)
 }

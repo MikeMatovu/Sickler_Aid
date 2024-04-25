@@ -52,7 +52,7 @@ fun DoctorDetailsScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(doctorId) {
-        viewModel.getDoctorById(doctorId?.toInt())
+        viewModel.getDoctorByFirebaseId(doctorId)
     }
 
 
@@ -82,9 +82,9 @@ fun DoctorDetailContent(
     navController: NavController,
     onEmergencyClick: () -> Unit,
     onFileSelected: (Uri?, Context) -> Unit,
-    onSendReportClick: (ActivityResultLauncher<String>) -> Unit
+    onSendReportClick: () -> Unit
 ) {
-    val doctor = state.doctor
+    val doctor = state.firebaseDoctor
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     val phoneNumberToDial = state.phoneNumberToDial
@@ -146,7 +146,7 @@ fun DoctorDetailContent(
 
             ButtonRow(
                 onAppointmentClick = { /*TODO*/ },
-                onSendReportClick = { onSendReportClick(getContent) },
+                onSendReportClick = { getContent.launch("application/pdf") } ,
             )
             Spacer(modifier = Modifier.height(64.dp))
 
