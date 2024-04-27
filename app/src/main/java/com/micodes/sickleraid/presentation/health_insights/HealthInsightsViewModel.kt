@@ -27,6 +27,7 @@ import com.itextpdf.layout.properties.UnitValue
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.domain.model.DailyCheckup
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
+import com.micodes.sickleraid.domain.repository.FirebaseRepository
 import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
 import com.micodes.sickleraid.presentation.charts.util.getTemperatureBarChartData
 import com.micodes.sickleraid.util.getCurrentDateTime
@@ -43,6 +44,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HealthInsightsViewModel @Inject constructor(
     private val dailyCheckupRepository: DailyCheckupRepository,
+    private val firebaseRepository: FirebaseRepository,
     private val auth: FirebaseAuth,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HealthInsightsState())
@@ -51,6 +53,7 @@ class HealthInsightsViewModel @Inject constructor(
 
     init {
         getTemperatureRecords()
+        geLatestDoctorRecommendation()
     }
 
     fun refreshData() {
@@ -72,6 +75,28 @@ class HealthInsightsViewModel @Inject constructor(
                 _state.value = _state.value.copy(prediction = prediction)
                 prediction += 0.1f
                 kotlinx.coroutines.delay(3000)
+            }
+        }
+    }
+
+    fun geLatestDoctorRecommendation() {
+        viewModelScope.launch {
+            val currentUser: FirebaseUser? = auth.currentUser
+            currentUser?.let { firebaseUser ->
+                val userId = firebaseUser.uid
+                try {
+                    val doctorRecommendation = firebaseRepository.getLatestRecommendation(userId)
+                    if (doctorRecommendation != null) {
+                        _state.value = state.value.copy(
+                            doctorRecommendation = doctorRecommendation.recommendation,
+                            isRecommendationLoading = false
+                        )
+                        Log.i("DoctorRecommendation", doctorRecommendation.toString())
+                    }
+                    Log.i("DoctorRecommendation", doctorRecommendation.toString())
+                } catch (e: Exception) {
+                    _state.value = state.value.copy(error = e)
+                }
             }
         }
     }

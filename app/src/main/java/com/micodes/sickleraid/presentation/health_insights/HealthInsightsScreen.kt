@@ -46,6 +46,7 @@ import com.micodes.sickleraid.presentation.health_insights.HealthInsightsViewMod
 import com.micodes.sickleraid.presentation.health_insights.components.DropDownMenuComposable
 import com.micodes.sickleraid.presentation.health_insights.components.HabitItem
 import com.micodes.sickleraid.presentation.health_insights.components.PrintReportBtn
+import com.micodes.sickleraid.presentation.health_insights.components.RecommendationCard
 import com.micodes.sickleraid.presentation.main_activity.MainViewModel
 import com.micodes.sickleraid.presentation.navgraph.Screen
 import java.io.InputStream
@@ -204,6 +205,14 @@ fun HealthInsightsScreen(
             HabitItem("Stay hydrated")
             HabitItem("Get enough sleep")
             HabitItem("Exercise regularly")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if(state.isRecommendationLoading) {
+                ProgressIndicatorComposable()
+            } else {
+                RecommendationCard(recommendation = state.doctorRecommendation ?: "No recommendation found")
+            }
 
 
             //  Refresh test button

@@ -13,5 +13,7 @@ data class HealthInsightsState(
     val isLoading: Boolean = true,
     val isEmpty: Boolean = false,
     val error: Throwable? = null,
-    val prediction: Float = 0.0f
+    val prediction: Float = 0.0f,
+    val isRecommendationLoading: Boolean = true,
+    val doctorRecommendation: String? = null
 )
