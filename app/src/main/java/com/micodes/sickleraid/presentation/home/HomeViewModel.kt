@@ -3,6 +3,8 @@ package com.micodes.sickleraid.presentation.home
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +28,13 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
+
+    //TO add this in the state
+    private val _allEducationalMaterials = MutableLiveData<List<SupportResource>>()
+    val allEducationalMaterials: LiveData<List<SupportResource>> = _allEducationalMaterials
+
+    private val _displayedEducationalMaterials = MutableLiveData<List<SupportResource>>()
+    val displayedEducationalMaterials: LiveData<List<SupportResource>> = _displayedEducationalMaterials
 
     fun getPrediction(
         sn: Int,
@@ -110,7 +119,7 @@ class HomeViewModel @Inject constructor(
             val currentUser: FirebaseUser? = auth.currentUser
             currentUser?.let { firebaseUser ->
                 val userId = firebaseUser.uid
-                val latestRecord = repository.getLatestPatientRecords(userId)
+                val latestRecord = repository.getLatestFirebasePatientRecords(userId)
                 _state.update {
                     it.copy(
                         latestRecords = latestRecord,
@@ -158,7 +167,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
-            educationalMaterials.take(6).forEachIndexed { index, (title, url) ->
+            educationalMaterials.forEachIndexed { index, (title, url) ->
                 // Check if there's already an existing SupportResource at this index
                 if (index < newSupportResources.size) {
                     // Use the existing imageResourceId from the state
@@ -180,10 +189,15 @@ class HomeViewModel @Inject constructor(
                 }
             }
 
+            _allEducationalMaterials.value = newSupportResources
+            _displayedEducationalMaterials.value = newSupportResources.take(6)
             updateSupportResourcesList(newSupportResources)
         }
     }
 
+    fun onViewAllClicked() {
+        _displayedEducationalMaterials.value = _allEducationalMaterials.value
+    }
 
     private fun updateSupportResourcesList(supportResources: List<SupportResource>) {
         _state.update { it.copy(supportResources = supportResources) }

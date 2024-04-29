@@ -30,7 +30,7 @@ fun RecommendationCard(recommendation: String) {
             Text(
                 text = "Doctor's Recommendation",
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -38,6 +38,7 @@ fun RecommendationCard(recommendation: String) {
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Justify
             )
+
         }
     }
 }

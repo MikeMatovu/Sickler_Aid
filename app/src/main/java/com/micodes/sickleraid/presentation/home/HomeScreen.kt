@@ -37,6 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.micodes.sickleraid.R
 import com.micodes.sickleraid.data.remote.DataProvider
+import com.micodes.sickleraid.domain.model.FirebaseMedicalRecord
+import com.micodes.sickleraid.domain.model.MedicalRecords
 import com.micodes.sickleraid.presentation.auth.AuthViewModel
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
@@ -62,6 +64,8 @@ fun HomeScreen(
     val state by homeViewModel.state.collectAsState()
     val latestDailyCheckup = state.latestRecords?.latestDailyCheckup
     val latestMedicalRecords = state.latestRecords?.latestMedicalRecord
+
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val authState = DataProvider.authState
@@ -124,30 +128,60 @@ fun HomeScreen(
                     buttonTitle = "Get Latest"
                 ) {
                     homeViewModel.getLatestPatientRecords()
-                    if (latestMedicalRecords != null && latestDailyCheckup != null) {
-                        homeViewModel.getPrediction(
-                            sn = latestMedicalRecords.bmi,
-                            gender = latestMedicalRecords.aat,
-                            patientAge = 40,
-                            diagnosisAge = 3,
-                            bmi = latestMedicalRecords.bmi,
-                            pcv = latestMedicalRecords.packetCellVolume,
-                            crisisFrequency = 6,
-                            transfusionFrequency = latestMedicalRecords.ldh,
-                            spo2 = latestDailyCheckup.pulseRate,
-                            systolicBP = latestDailyCheckup.systolicBP,
-                            diastolicBP = latestDailyCheckup.diastolicBP,
-                            heartRate = latestDailyCheckup.respiratoryRate,
-                            respiratoryRate = latestDailyCheckup.respiratoryRate,
-                            hbF = latestMedicalRecords.fetalHaemoglobin,
-                            temp = latestDailyCheckup.temperature,
-                            mcv = latestMedicalRecords.meanCorpuscularVolume,
-                            platelets = latestMedicalRecords.platelets,
-                            alt = latestMedicalRecords.aat,
-                            bilirubin = latestMedicalRecords.birulubin,
-                            ldh = latestMedicalRecords.ldh,
-                            percentageAverage = 60
-                        )
+                    if (latestDailyCheckup != null) {
+                        when (latestMedicalRecords) {
+                            is MedicalRecords -> {
+                                homeViewModel.getPrediction(
+                                    sn = latestMedicalRecords.bmi,
+                                    gender = latestMedicalRecords.aat,
+                                    patientAge = 40,
+                                    diagnosisAge = 3,
+                                    bmi = latestMedicalRecords.bmi,
+                                    pcv = latestMedicalRecords.packetCellVolume,
+                                    crisisFrequency = 6,
+                                    transfusionFrequency = latestMedicalRecords.ldh,
+                                    spo2 = latestDailyCheckup.pulseRate,
+                                    systolicBP = latestDailyCheckup.systolicBP,
+                                    diastolicBP = latestDailyCheckup.diastolicBP,
+                                    heartRate = latestDailyCheckup.respiratoryRate,
+                                    respiratoryRate = latestDailyCheckup.respiratoryRate,
+                                    hbF = latestMedicalRecords.fetalHaemoglobin,
+                                    temp = latestDailyCheckup.temperature,
+                                    mcv = latestMedicalRecords.meanCorpuscularVolume,
+                                    platelets = latestMedicalRecords.platelets,
+                                    alt = latestMedicalRecords.aat,
+                                    bilirubin = latestMedicalRecords.birulubin,
+                                    ldh = latestMedicalRecords.ldh,
+                                    percentageAverage = 60
+                                )
+                            }
+                            is FirebaseMedicalRecord -> {
+                                homeViewModel.getPrediction(
+                                    sn = latestMedicalRecords.bmi,
+                                    gender = latestMedicalRecords.aat,
+                                    patientAge = 40,
+                                    diagnosisAge = 3,
+                                    bmi = latestMedicalRecords.bmi,
+                                    pcv = latestMedicalRecords.packetCellVolume,
+                                    crisisFrequency = 6,
+                                    transfusionFrequency = latestMedicalRecords.ldh,
+                                    spo2 = latestDailyCheckup.pulseRate,
+                                    systolicBP = latestDailyCheckup.systolicBP,
+                                    diastolicBP = latestDailyCheckup.diastolicBP,
+                                    heartRate = latestDailyCheckup.respiratoryRate,
+                                    respiratoryRate = latestDailyCheckup.respiratoryRate,
+                                    hbF = latestMedicalRecords.fetalHaemoglobin,
+                                    temp = latestDailyCheckup.temperature,
+                                    mcv = latestMedicalRecords.meanCorpuscularVolume,
+                                    platelets = latestMedicalRecords.platelets,
+                                    alt = latestMedicalRecords.aat,
+                                    bilirubin = latestMedicalRecords.birulubin,
+                                    ldh = latestMedicalRecords.ldh,
+                                    percentageAverage = 60
+                                )
+                            }
+                            null -> TODO()
+                        }
                     }
                 }
                 Column(
@@ -160,7 +194,7 @@ fun HomeScreen(
                         },
                         modifier = Modifier
                     )
-                    if(state.isPredicting) {
+                    if (state.isPredicting) {
                         ProgressIndicatorComposable()
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -197,15 +231,17 @@ fun HomeScreen(
                     sectionTitle = "My support",
                     buttonTitle = "View All"
                 ) {
-                    TODO()
+                    homeViewModel.onViewAllClicked()
                 }
 
                 if (state.isLoading) {
                     ProgressIndicatorComposable()
                 } else {
-                    ResourcesRow(resources = state.supportResources) { url ->
-                        // Handle resource click
-                        homeViewModel.onResourceClicked(context, url)
+                    homeViewModel.displayedEducationalMaterials.value?.let {
+                        ResourcesRow(resources = it) { url ->
+                            // Handle resource click
+                            homeViewModel.onResourceClicked(context, url)
+                        }
                     }
                 }
 
@@ -237,77 +273,14 @@ fun HomeScreen(
 //                    )
 //                }
 
-//                Spacer(modifier = Modifier.height(12.dp))
-//                Button(
-//                    onClick = {
-//                        homeViewModel.getPrediction(
-//                            sn = 3,
-//                            gender = 1,
-//                            patientAge = 40,
-//                            diagnosisAge = 3,
-//                            bmi = 18,
-//                            pcv = 71,
-//                            crisisFrequency = 6,
-//                            transfusionFrequency = 1,
-//                            spo2 = 23,
-//                            systolicBP = 168,
-//                            diastolicBP = 100,
-//                            heartRate = 185,
-//                            respiratoryRate = 12,
-//                            hbF = 12,
-//                            temp = 38,
-//                            mcv = 135,
-//                            platelets = 239317,
-//                            alt = 51,
-//                            bilirubin = 1,
-//                            ldh = 335,
-//                            percentageAverage = 60
-//                        )
-//                    },
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Get Prediction")
-//                }
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(
-                    onClick = {
-                        if (latestMedicalRecords != null && latestDailyCheckup != null) {
-                            homeViewModel.getPrediction(
-                                sn = latestMedicalRecords.bmi,
-                                gender = latestMedicalRecords.aat,
-                                patientAge = 40,
-                                diagnosisAge = 3,
-                                bmi = latestMedicalRecords.bmi,
-                                pcv = latestMedicalRecords.packetCellVolume,
-                                crisisFrequency = 6,
-                                transfusionFrequency = latestMedicalRecords.ldh,
-                                spo2 = latestDailyCheckup.pulseRate,
-                                systolicBP = latestDailyCheckup.systolicBP,
-                                diastolicBP = latestDailyCheckup.diastolicBP,
-                                heartRate = latestDailyCheckup.respiratoryRate,
-                                respiratoryRate = latestDailyCheckup.respiratoryRate,
-                                hbF = latestMedicalRecords.fetalHaemoglobin,
-                                temp = latestDailyCheckup.temperature,
-                                mcv = latestMedicalRecords.meanCorpuscularVolume,
-                                platelets = latestMedicalRecords.platelets,
-                                alt = latestMedicalRecords.aat,
-                                bilirubin = latestMedicalRecords.birulubin,
-                                ldh = latestMedicalRecords.ldh,
-                                percentageAverage = 60
-                            )
-                        }
-                    },
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(text = "Get Prediction")
-                }
-//                if (predictionState.value == null) {
-//                    ProgressIndicatorComposable()
-//                }
-                state.predictionState?.let { predictionResponse ->
-                    // Handle prediction response here
-                    Text("This is the prediction: ${predictionResponse.prediction}")
+                if (state.isPredicting) {
+                    ProgressIndicatorComposable()
+                } else {
+//                    state.predictionState?.let { predictionResponse ->
+//                        // Handle prediction response here
+//                        Text("This is the prediction: ${predictionResponse.prediction}")
+//                    }
                 }
 
 

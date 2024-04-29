@@ -28,6 +28,7 @@ import com.micodes.sickleraid.R
 import com.micodes.sickleraid.domain.model.DailyCheckup
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
 import com.micodes.sickleraid.domain.repository.FirebaseRepository
+import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
 import com.micodes.sickleraid.presentation.charts.util.getTemperatureBarChartData
 import com.micodes.sickleraid.util.getCurrentDateTime
@@ -35,6 +36,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -45,6 +47,7 @@ import javax.inject.Inject
 class HealthInsightsViewModel @Inject constructor(
     private val dailyCheckupRepository: DailyCheckupRepository,
     private val firebaseRepository: FirebaseRepository,
+    private val repository: SicklerAidRepository,
     private val auth: FirebaseAuth,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HealthInsightsState())
@@ -54,30 +57,95 @@ class HealthInsightsViewModel @Inject constructor(
     init {
         getTemperatureRecords()
         geLatestDoctorRecommendation()
+        getLatestPatientRecords()
     }
 
     fun refreshData() {
         getTemperatureRecords()
+        geLatestDoctorRecommendation()
+        getLatestPatientRecords()
         getAllDailyCheckup()
-        generateRandomPrediction()
     }
 
     fun updatePdfUri(uri: Uri?) {
         _state.value = _state.value.copy(pdfUri = uri)
     }
 
-
-    private fun generateRandomPrediction() {
-        //Increase the value every 3 seconds until max
+    fun getLatestPatientRecords() {
         viewModelScope.launch {
-            var prediction = 0.0f
-            while (prediction < 1.0f) {
-                _state.value = _state.value.copy(prediction = prediction)
-                prediction += 0.1f
-                kotlinx.coroutines.delay(3000)
+            val currentUser: FirebaseUser? = auth.currentUser
+            currentUser?.let { firebaseUser ->
+                val userId = firebaseUser.uid
+                val latestRecord = repository.getLatestFirebasePatientRecords(userId)
+                _state.update {
+                    it.copy(
+                        latestRecords = latestRecord,
+                    )
+                }
             }
         }
     }
+
+    fun getPrediction(
+        sn: Int,
+        gender: Int,
+        patientAge: Int,
+        diagnosisAge: Int,
+        bmi: Int,
+        pcv: Int,
+        crisisFrequency: Int,
+        transfusionFrequency: Int,
+        spo2: Int,
+        systolicBP: Int,
+        diastolicBP: Int,
+        heartRate: Int,
+        respiratoryRate: Int,
+        hbF: Int,
+        temp: Int,
+        mcv: Int,
+        platelets: Int,
+        alt: Int,
+        bilirubin: Int,
+        ldh: Int,
+        percentageAverage: Int
+    ) {
+        viewModelScope.launch {
+            _state.value =
+                state.value.copy(isPredicting = true)
+            val prediction = repository.getPrediction(
+                sn,
+                gender,
+                patientAge,
+                diagnosisAge,
+                bmi,
+                pcv,
+                crisisFrequency,
+                transfusionFrequency,
+                spo2,
+                systolicBP,
+                diastolicBP,
+                heartRate,
+                respiratoryRate,
+                hbF,
+                temp,
+                mcv,
+                platelets,
+                alt,
+                bilirubin,
+                ldh,
+                percentageAverage
+            )
+            _state.update {
+                it.copy(
+                    predictionState = prediction,
+                    isPredicting = false
+                )
+
+            }
+        }
+    }
+
+
 
     fun geLatestDoctorRecommendation() {
         viewModelScope.launch {
@@ -91,9 +159,12 @@ class HealthInsightsViewModel @Inject constructor(
                             doctorRecommendation = doctorRecommendation.recommendation,
                             isRecommendationLoading = false
                         )
-                        Log.i("DoctorRecommendation", doctorRecommendation.toString())
+                    } else {
+                        _state.value = state.value.copy(
+                            doctorRecommendation = "",
+                            isRecommendationLoading = false
+                        )
                     }
-                    Log.i("DoctorRecommendation", doctorRecommendation.toString())
                 } catch (e: Exception) {
                     _state.value = state.value.copy(error = e)
                 }

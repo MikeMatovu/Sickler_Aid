@@ -8,7 +8,6 @@ class RetrofitPredictionRemoteDataSource @Inject constructor(
     private val predictionApi: PredictionApi
 ) : PredictionRemoteDataSource{
     override  suspend fun getPrediction(
-        sn: Int,
         gender: Int,
         patientAge: Int,
         diagnosisAge: Int,
@@ -31,7 +30,7 @@ class RetrofitPredictionRemoteDataSource @Inject constructor(
         percentageAverage: Int
     ): PredictionResponse {
         val request = PredictionRequest(
-            sn,
+//            sn,
             gender,
             patientAge,
             diagnosisAge,

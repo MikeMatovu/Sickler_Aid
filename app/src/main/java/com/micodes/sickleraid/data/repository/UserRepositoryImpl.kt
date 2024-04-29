@@ -61,6 +61,8 @@ class UserRepositoryImpl @Inject constructor(
                     email = firebaseUser.email ?: "",
                     phoneNumber = userUpdate.phoneNumber
                 )
+                //save to too, to inorder not to break the foreign key constraint
+                userDao.insertOrUpdateUser(user)
 
                 // Save user details to Firestore instead of Room
                 firestore.collection("users").document(user.uid).set(user)

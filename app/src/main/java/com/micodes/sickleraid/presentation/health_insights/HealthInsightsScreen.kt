@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.micodes.sickleraid.R
+import com.micodes.sickleraid.domain.model.FirebaseMedicalRecord
+import com.micodes.sickleraid.domain.model.MedicalRecords
 import com.micodes.sickleraid.presentation.charts.BarchartWithSolidBars
 import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.common.composable.TopAppBarComposable
@@ -60,7 +63,17 @@ fun HealthInsightsScreen(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val latestDailyCheckup = state.latestRecords?.latestDailyCheckup
+    val latestMedicalRecords = state.latestRecords?.latestMedicalRecord
     val context = LocalContext.current
+
+    val predictionResponse = state.predictionState
+
+    val progress = when (predictionResponse.prediction) {
+        "0" -> 1 - predictionResponse.probability0
+        "1" -> predictionResponse.probability1
+        else -> 0.0
+    }
 
     Scaffold(
         topBar = {
@@ -69,7 +82,7 @@ fun HealthInsightsScreen(
                     Text(text = "Health Insights", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 actions = listOf {
-                    TextButton(onClick = { navController.navigate(Screen.DoctorList.route)}) {
+                    TextButton(onClick = { navController.navigate(Screen.DoctorList.route) }) {
                         Text(text = "My doctor")
                     }
                 }
@@ -111,13 +124,13 @@ fun HealthInsightsScreen(
                     modifier = Modifier.padding(8.dp)
                 )
                 LinearProgressIndicator(
-                    progress = state.prediction,
+                    progress = progress.toFloat(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
 
                     )
-                if (state.prediction > 0.5) {
+                if (progress.toFloat() > 0.5) {
                     mainViewModel.showSimpleNotification(
                         context = context,
                         title = "High risk",
@@ -126,12 +139,79 @@ fun HealthInsightsScreen(
                     )
                 }
                 Text(
-                    text = "${state.prediction * 100}% possibility of a crisis",
+                    text = "${progress.toFloat() * 100}% possibility of a crisis",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(8.dp)
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+
+                viewModel.getLatestPatientRecords()
+                if (latestDailyCheckup != null) {
+                    when (latestMedicalRecords) {
+                        is MedicalRecords -> {
+                            viewModel.getPrediction(
+                                sn = latestMedicalRecords.bmi,
+                                gender = 1,
+                                patientAge = 40,
+                                diagnosisAge = 3,
+                                bmi = latestMedicalRecords.bmi,
+                                pcv = latestMedicalRecords.packetCellVolume,
+                                crisisFrequency = 6,
+                                transfusionFrequency = latestMedicalRecords.ldh,
+                                spo2 = latestDailyCheckup.pulseRate,
+                                systolicBP = latestDailyCheckup.systolicBP,
+                                diastolicBP = latestDailyCheckup.diastolicBP,
+                                heartRate = latestDailyCheckup.respiratoryRate,
+                                respiratoryRate = latestDailyCheckup.respiratoryRate,
+                                hbF = latestMedicalRecords.fetalHaemoglobin,
+                                temp = latestDailyCheckup.temperature,
+                                mcv = latestMedicalRecords.meanCorpuscularVolume,
+                                platelets = latestMedicalRecords.platelets,
+                                alt = latestMedicalRecords.aat,
+                                bilirubin = latestMedicalRecords.birulubin,
+                                ldh = latestMedicalRecords.ldh,
+                                percentageAverage = 100
+                            )
+                        }
+
+                        //TODO: Remove the static values and replace with actual values
+
+                        is FirebaseMedicalRecord -> {
+                            viewModel.getPrediction(
+                                sn = latestMedicalRecords.bmi,
+                                gender = latestMedicalRecords.aat,
+                                patientAge = 40,
+                                diagnosisAge = 3,
+                                bmi = latestMedicalRecords.bmi,
+                                pcv = latestMedicalRecords.packetCellVolume,
+                                crisisFrequency = 6,
+                                transfusionFrequency = latestMedicalRecords.ldh,
+                                spo2 = latestDailyCheckup.pulseRate,
+                                systolicBP = latestDailyCheckup.systolicBP,
+                                diastolicBP = latestDailyCheckup.diastolicBP,
+                                heartRate = latestDailyCheckup.respiratoryRate,
+                                respiratoryRate = latestDailyCheckup.respiratoryRate,
+                                hbF = latestMedicalRecords.fetalHaemoglobin,
+                                temp = latestDailyCheckup.temperature,
+                                mcv = latestMedicalRecords.meanCorpuscularVolume,
+                                platelets = latestMedicalRecords.platelets,
+                                alt = latestMedicalRecords.aat,
+                                bilirubin = latestMedicalRecords.birulubin,
+                                ldh = latestMedicalRecords.ldh,
+                                percentageAverage = 60
+                            )
+                        }
+
+                        null -> TODO()
+                    }
+                }
+            }) {
+                Text("Latest prediction")
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Weekly temperature graph",
@@ -165,7 +245,7 @@ fun HealthInsightsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             //Second bar chart for other stats
             Text(
-                text = "Weekly temperature graph",
+                text = "Weekly health graph",
                 modifier = Modifier
                     .padding(8.dp),
                 style = MaterialTheme.typography.headlineMedium
@@ -208,26 +288,44 @@ fun HealthInsightsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if(state.isRecommendationLoading) {
+            if (state.isRecommendationLoading) {
                 ProgressIndicatorComposable()
             } else {
-                RecommendationCard(recommendation = state.doctorRecommendation ?: "No recommendation found")
+                RecommendationCard(
+                    recommendation = state.doctorRecommendation ?: "No recommendation found"
+                )
             }
 
 
-            //  Refresh test button
-            Button(onClick = { viewModel.refreshData() }) {
-                Text(text = "REFRESH")
+
+
+
+            if (state.isPredicting) {
+                ProgressIndicatorComposable()
             }
 
             //START DUMMY CONTENT HERE
 
-
+            Spacer(modifier = Modifier.height(16.dp))
             val pdfUri = state.pdfUri
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                //  Refresh test button
+                Button(onClick = { viewModel.refreshData() }) {
+                    Text(text = "REFRESH")
+                }
 
-            PrintReportBtn { uri ->
-                viewModel.updatePdfUri(uri)
+                PrintReportBtn { uri ->
+                    viewModel.updatePdfUri(uri)
+                }
             }
+
+
+
+
 
             pdfUri?.let { uri ->
                 LaunchedEffect(uri) {

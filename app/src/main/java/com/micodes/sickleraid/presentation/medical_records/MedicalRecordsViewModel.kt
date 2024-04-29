@@ -121,6 +121,7 @@ class MedicalRecordsViewModel @Inject constructor(
                     bmi = state.value.bmi,
                     weight = state.value.weight,
                     packetCellVolume = state.value.packetCellVolume,
+                    peripheralCapacity = state.value.peripheralCapillarity,
                     platelets = state.value.platelets,
                     birulubin = state.value.birulubin,
                     ldh = state.value.lactateDehydrogenase,
@@ -143,7 +144,6 @@ class MedicalRecordsViewModel @Inject constructor(
                     // Convert timestamp to date and time
                     val dateTime = medicalRecord?.let { timestampToDateTime(it.timestamp) }
                     _state.update { it.copy(lastModifiedDateTime = dateTime) }
-                    Log.i("MedicalRecordsViewModel", "latestRecord: $medicalRecord")
                 }
             }
         }

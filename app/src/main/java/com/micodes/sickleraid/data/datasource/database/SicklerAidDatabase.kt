@@ -23,7 +23,7 @@ import com.micodes.sickleraid.domain.model.UserDoctorCrossRef
         MedicineTable::class,
         UserDoctorCrossRef::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class SicklerAidDatabase : RoomDatabase() {

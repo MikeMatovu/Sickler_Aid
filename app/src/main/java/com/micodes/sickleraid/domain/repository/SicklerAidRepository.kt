@@ -32,6 +32,8 @@ interface SicklerAidRepository {
 
     suspend fun getLatestPatientRecords(userId: String): LatestPatientRecords?
 
+    suspend fun getLatestFirebasePatientRecords(userId: String): LatestPatientRecords?
+
     suspend fun fetchHtmlContent(url: String): String
     suspend fun scrapeEducationalMaterials(html: String): List<Pair<String, String>>
 
