@@ -4,7 +4,7 @@ import com.micodes.sickleraid.data.remote.dto.PredictionResponse
 
 interface PredictionRemoteDataSource {
     suspend fun getPrediction(
-        sn: Int,
+//        sn: Int,
         gender: Int,
         patientAge: Int,
         diagnosisAge: Int,

@@ -1,5 +1,6 @@
 package com.micodes.sickleraid.presentation.medicine
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -170,6 +171,7 @@ class MedicineViewModel @Inject constructor(
             currentUser?.let { firebaseUser ->
                 val userId = firebaseUser.uid
                 val medicineList = repository.getMedicines(userId)
+                Log.i("MedicineViewModel", "MedicineList: $medicineList")
                 _state.value = state.value.copy(
                     medicineList = medicineList.map {
                         Medicine(

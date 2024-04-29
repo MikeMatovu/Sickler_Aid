@@ -4,12 +4,14 @@ import com.micodes.sickleraid.data.remote.PredictionRemoteDataSource
 import com.micodes.sickleraid.data.remote.RetrofitPredictionRemoteDataSource
 import com.micodes.sickleraid.data.repository.DailyCheckupRepositoryImpl
 import com.micodes.sickleraid.data.repository.DoctorRepositoryImpl
+import com.micodes.sickleraid.data.repository.FirebaseRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicalRecordsRepositoryImpl
 import com.micodes.sickleraid.data.repository.MedicineRepositoryImpl
 import com.micodes.sickleraid.data.repository.SicklerAidRepositoryImpl
 import com.micodes.sickleraid.data.repository.UserRepositoryImpl
 import com.micodes.sickleraid.domain.repository.DailyCheckupRepository
 import com.micodes.sickleraid.domain.repository.DoctorRepository
+import com.micodes.sickleraid.domain.repository.FirebaseRepository
 import com.micodes.sickleraid.domain.repository.MedicalRecordsRepository
 import com.micodes.sickleraid.domain.repository.MedicineRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
@@ -50,6 +52,9 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindDoctorRepository(doctorRepositoryImpl: DoctorRepositoryImpl): DoctorRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindFirebaseRepository(firebaseRepositoryImpl: FirebaseRepositoryImpl): FirebaseRepository
 
     @Binds
     @Singleton

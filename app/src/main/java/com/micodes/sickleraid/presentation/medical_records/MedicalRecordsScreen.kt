@@ -46,7 +46,7 @@ fun MedicalRecordsScreen(
     MedicalRecordsScreenContent(
         uiState = state,
         navController = navController,
-        onSaveClick = viewModel::saveRecords,
+        onSaveClick = viewModel::saveRecordsToFirebase,
         openDialog = viewModel::openDialog,
         onDismissDialog = viewModel::onDialogDismiss,
         onWeightChange = viewModel::onChangeWeight,

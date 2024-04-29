@@ -34,7 +34,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.micodes.sickleraid.presentation.common.composable.BasicField
 import com.micodes.sickleraid.presentation.common.composable.CenterAlignedTopAppBarComposable
+import com.micodes.sickleraid.presentation.common.composable.ProgressIndicatorComposable
 import com.micodes.sickleraid.presentation.doctor_detail.components.DoctorListItem
+import com.micodes.sickleraid.presentation.doctor_detail.components.FirebaseDoctorListItem
 import com.micodes.sickleraid.presentation.navgraph.Screen
 
 @Composable
@@ -50,7 +52,7 @@ fun DoctorListScreen(
         uiState = uiState,
         onAddDoctorClick = viewModel::showDialog,
         onCancelDialog = viewModel::hideDialog,
-        onSaveDoctor = viewModel::insertDoctor,
+        onSaveDoctor = viewModel::insertDoctor2,
         onFirstNameChange = viewModel::onFirstNameChanged,
         onLastNameChange = viewModel::onLastNameChanged,
         onEmailChange = viewModel::onEmailChanged,
@@ -139,12 +141,18 @@ fun DoctorListScreenContent(
                 modifier = Modifier.padding(16.dp)
             ) {
                 LazyColumn {
-                    items(uiState.doctorList.size) { index ->
-                        DoctorListItem(
-                            doctor = uiState.doctorList[index],
-                            onDoctorDetailsClick = {navController.navigate("doctor/${uiState.doctorList[index].id}")}
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
+                    if(uiState.isDoctorLoading) {
+                        item {
+                            ProgressIndicatorComposable()
+                        }
+                    }else {
+                        items(uiState.firebaseDoctorList.size) { index ->
+                            FirebaseDoctorListItem(
+                                doctor = uiState.firebaseDoctorList[index],
+                                onDoctorDetailsClick = { navController.navigate("doctor/${uiState.firebaseDoctorList[index].id}") }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
             }

@@ -15,6 +15,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import com.micodes.sickleraid.R
 import javax.inject.Named
 
@@ -24,6 +26,8 @@ object FirebaseModule {
     @Provides fun auth(): FirebaseAuth = Firebase.auth
 
     @Provides fun firestore(): FirebaseFirestore = Firebase.firestore
+
+    @Provides fun firebaseStorage(): FirebaseStorage = Firebase.storage
 
     @Provides
     fun provideOneTapClient(

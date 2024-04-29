@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+sealed interface MedicalRecordsType
+
 @Entity(
     tableName = "medical_records",
     foreignKeys = [
@@ -21,6 +23,7 @@ data class MedicalRecords(
     val bmi: Int = 0,
     val weight: Int = 0,
     val packetCellVolume: Int = 0,
+    val peripheralCapacity: Int = 0,
     val platelets: Int = 0,
     val birulubin: Int = 0,
     val ldh: Int = 0,
@@ -28,4 +31,20 @@ data class MedicalRecords(
     val meanCorpuscularVolume: Int = 0,
     val aat: Int = 0,
     val timestamp: Long = System.currentTimeMillis()
-)
+): MedicalRecordsType
+
+data class FirebaseMedicalRecord(
+    val id: String = "",
+    val userId: String = "",
+    val bmi: Int = 0,
+    val weight: Int = 0,
+    val packetCellVolume: Int = 0,
+    val peripheralCapacity: Int = 0,
+    val platelets: Int = 0,
+    val birulubin: Int = 0,
+    val ldh: Int = 0,
+    val fetalHaemoglobin: Int = 0,
+    val meanCorpuscularVolume: Int = 0,
+    val aat: Int = 0,
+    val timestamp: Long = System.currentTimeMillis()
+): MedicalRecordsType

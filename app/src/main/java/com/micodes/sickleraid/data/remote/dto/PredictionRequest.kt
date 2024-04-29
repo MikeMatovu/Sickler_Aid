@@ -1,7 +1,7 @@
 package com.micodes.sickleraid.data.remote.dto
 
 data class PredictionRequest(
-    val sn: Int,
+//    val sn: Int,
     val gender: Int,
     val patientAge: Int,
     val diagnosisAge: Int,

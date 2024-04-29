@@ -2,7 +2,9 @@ package com.micodes.sickleraid.presentation.health_insights
 
 import android.net.Uri
 import co.yml.charts.ui.barchart.models.BarData
+import com.micodes.sickleraid.data.remote.dto.PredictionResponse
 import com.micodes.sickleraid.domain.model.DailyCheckup
+import com.micodes.sickleraid.domain.model.LatestPatientRecords
 import com.micodes.sickleraid.domain.model.TemperatureRecord
 
 data class HealthInsightsState(
@@ -13,5 +15,10 @@ data class HealthInsightsState(
     val isLoading: Boolean = true,
     val isEmpty: Boolean = false,
     val error: Throwable? = null,
-    val prediction: Float = 0.0f
+    val isRecommendationLoading: Boolean = true,
+    val doctorRecommendation: String? = null,
+
+    var predictionState: PredictionResponse = PredictionResponse("0", 1.0, 0.0),
+    var latestRecords: LatestPatientRecords? = null,
+    var isPredicting: Boolean = false
 )

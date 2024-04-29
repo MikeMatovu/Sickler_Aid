@@ -41,6 +41,7 @@ data class HomeState(
         ),
 
         ),
+
     var medicineList: List<MedicineItem> = emptyList(),
     var isLoading: Boolean = false,
     var isPredicting: Boolean = false

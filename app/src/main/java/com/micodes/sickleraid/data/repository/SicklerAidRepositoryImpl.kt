@@ -8,6 +8,7 @@ import com.micodes.sickleraid.data.remote.PredictionRemoteDataSource
 import com.micodes.sickleraid.data.remote.dto.PredictionResponse
 import com.micodes.sickleraid.domain.model.Doctor
 import com.micodes.sickleraid.domain.model.LatestPatientRecords
+import com.micodes.sickleraid.domain.repository.FirebaseRepository
 import com.micodes.sickleraid.domain.repository.SicklerAidRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,6 +20,7 @@ open class SicklerAidRepositoryImpl @Inject constructor(
     private val dao: SicklerAidDao,
     private val dailyCheckupDao: DailyCheckupDao,
     private val medicalRecordsDao: MedicalRecordsDao,
+    private val firebaseRepository: FirebaseRepository,
     private val predictionRemoteDataSource: PredictionRemoteDataSource
 ) : SicklerAidRepository {
     override suspend fun getPrediction(
@@ -45,7 +47,7 @@ open class SicklerAidRepositoryImpl @Inject constructor(
         percentageAverage: Int
     ): PredictionResponse {
         return predictionRemoteDataSource.getPrediction(
-            sn, gender, patientAge, diagnosisAge, bmi, pcv, crisisFrequency, transfusionFrequency,
+            gender, patientAge, diagnosisAge, bmi, pcv, crisisFrequency, transfusionFrequency,
             spo2, systolicBP, diastolicBP, heartRate, respiratoryRate, hbF, temp, mcv, platelets, alt,
             bilirubin, ldh, percentageAverage
         )
@@ -55,6 +57,17 @@ open class SicklerAidRepositoryImpl @Inject constructor(
     override suspend fun getLatestPatientRecords(userId: String): LatestPatientRecords? {
         val latestDailyCheckup = dailyCheckupDao.getLatestCheckup(userId)
         val latestMedicalRecord = medicalRecordsDao.getLatestMedicalRecord(userId)
+
+        return if (latestDailyCheckup != null && latestMedicalRecord != null) {
+            LatestPatientRecords(latestDailyCheckup, latestMedicalRecord)
+        } else {
+            null
+        }
+    }
+
+    override suspend fun getLatestFirebasePatientRecords(userId: String): LatestPatientRecords? {
+        val latestDailyCheckup = dailyCheckupDao.getLatestCheckup(userId)
+        val latestMedicalRecord = firebaseRepository.getLatestRecord(userId)
 
         return if (latestDailyCheckup != null && latestMedicalRecord != null) {
             LatestPatientRecords(latestDailyCheckup, latestMedicalRecord)
